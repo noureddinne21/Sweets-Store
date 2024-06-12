@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.SweetsStore" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="mytheam">
+
+        <item name="colorPrimaryDark">@color/Pink</item>
+
+    </style>
+
+    <style name="mytext">
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/Pink</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:fontFamily">cursive</item>
+    </style>
+
+    <style name="Theme.SweetsStore" parent="Base.Theme.SweetsStore" />
+</resources>
