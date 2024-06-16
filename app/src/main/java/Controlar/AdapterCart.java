@@ -3,6 +3,7 @@ package Controlar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,18 +23,18 @@ import java.util.ArrayList;
 
 import Database.Database;
 import Model.Model;
-import Database.DatabaseCart;
+import Model.ModelCart;
 
 public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     Context context;
-    ArrayList<Model> dessertList;
+    //ArrayList<Model> dessertList;
+    ArrayList<ModelCart> dessertListCart;
     Database db ;
-    DatabaseCart dbc ;
     public static Double total=0.0;
-    public AdapterCart(Context context, ArrayList<Model> dessertList) {
+    public AdapterCart(Context context, ArrayList<ModelCart> dessertListCart) {
         this.context = context;
-        this.dessertList = dessertList;
+        this.dessertListCart = dessertListCart;
     }
 
     @NonNull
@@ -45,18 +46,22 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCart.ViweHolder holder, int position) {
-
-        Model model = dessertList.get(position);
-        total+=Double.parseDouble(model.getPrice());
-        holder.textName.setText(model.getName());
-        holder.textPrice.setText(model.getPrice());
-        holder.textCount.setText("1");
-        Glide.with(context).load(model.getImg()).into(holder.imgDessert);
-
-        Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
-
         db = new Database(context);
-        dbc = new DatabaseCart(context);
+        DecimalFormat df = new DecimalFormat("#.##");
+
+
+        ModelCart modelCart = dessertListCart.get(position);
+        Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
+
+        //total+=Double.parseDouble(model.getPrice());
+
+            holder.textName.setText(model.getName());
+            holder.textPrice.setText(modelCart.getPrice());
+            holder.textCount.setText(modelCart.getCount());
+            Glide.with(context).load(model.getImg()).into(holder.imgDessert);
+
+        //Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+
 
         holder.imgDessert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +81,8 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 boolean newCartStatus = !model.getCart();
                 model.setCart(newCartStatus);
                 db.updateDessert(model);
-                dessertList.remove(position);
+                db.deleteDessertCart(modelCart);
+                dessertListCart.remove(position);
                 notifyItemRemoved(position);
 
             }
@@ -86,13 +92,18 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
             @Override
             public void onClick(View v) {
 
-                DecimalFormat df = new DecimalFormat("#.##");
-                int count = Integer.parseInt(holder.textCount.getText().toString())+1;
-                Double sum = Double.valueOf(df.format(Double.parseDouble(model.getPrice())*count));
+                int count= Integer.parseInt(modelCart.getCount());
+                count++;
+                Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+                modelCart.setCount(String.valueOf(count));
+                modelCart.setPrice(String.valueOf(price));
+                db.updateDessertCart(modelCart);
+
                 holder.textCount.setText(String.valueOf(count));
-                holder.textPrice.setText(String.valueOf(sum));
-                total+=sum;
-                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+                holder.textPrice.setText(String.valueOf(price));
+
+                //total+=sum;
+                //Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -100,14 +111,25 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         holder.imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int count= Integer.parseInt(modelCart.getCount());
+                if (count>1){
+                    count--;
+                Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+                modelCart.setCount(String.valueOf(count));
+                modelCart.setPrice(String.valueOf(price));
+                db.updateDessertCart(modelCart);
 
-                DecimalFormat df = new DecimalFormat("#.##");
-                int count = Integer.parseInt(holder.textCount.getText().toString())-1;
-                Double sum = Double.valueOf(df.format(Double.parseDouble(model.getPrice())*count));
                 holder.textCount.setText(String.valueOf(count));
-                holder.textPrice.setText(String.valueOf(sum));
-                total+=sum;
-                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+                holder.textPrice.setText(String.valueOf(price));
+                }
+
+//                DecimalFormat df = new DecimalFormat("#.##");
+//                int count = Integer.parseInt(holder.textCount.getText().toString())-1;
+//                Double sum = Double.valueOf(df.format(Double.parseDouble(model.getPrice())*count));
+//                holder.textCount.setText(String.valueOf(count));
+//                holder.textPrice.setText(String.valueOf(sum));
+//                total+=sum;
+//                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -118,7 +140,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     @Override
     public int getItemCount() {
-        return dessertList.size();
+        return dessertListCart.size();
     }
 
     public class ViweHolder extends RecyclerView.ViewHolder{

@@ -38,7 +38,7 @@ public class DatabaseCart extends SQLiteOpenHelper {
 
 
 
-    public void addDessert(ModelCart model){
+    public void addDessertCart(ModelCart model){
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -51,7 +51,7 @@ public class DatabaseCart extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<ModelCart> getAllDESSERT(){
+    public ArrayList<ModelCart> getAllDESSERTCart(){
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         ArrayList<ModelCart> dessertList = new ArrayList<ModelCart>();
         String getAll = "SELECT * FROM "+UtelsCart.DESSERT_TABLE_CART;
@@ -73,8 +73,38 @@ public class DatabaseCart extends SQLiteOpenHelper {
 
 
 
+    public boolean checkTableExists() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+//        Cursor cursor = db.rawQuery("SELECT * FROM UtelsCart.NAME_DATABASE_CART WHERE type = ? AND name = ?", new String[]{"table", UtelsCart.DESSERT_TABLE_CART});
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM "+UtelsCart.NAME_DATABASE_CART+" WHERE type = ? AND name = ?", new String[]{"table", UtelsCart.DESSERT_TABLE_CART});
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count > 0;
+        }
+        return false;
+    }
 
 
+    public ArrayList<String> getAllTables() {
+        ArrayList<String> tables = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        try {
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    tables.add(cursor.getString(0));
+                    cursor.moveToNext();
+                }
+            }
+        } finally {
+            cursor.close();
+        }
+        return tables;
+    }
 
 
 

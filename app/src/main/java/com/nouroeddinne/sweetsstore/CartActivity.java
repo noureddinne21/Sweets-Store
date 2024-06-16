@@ -2,6 +2,8 @@ package com.nouroeddinne.sweetsstore;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +27,6 @@ import Controlar.AdapterCart;
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
-import Database.DatabaseCart;
 
 public class CartActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -33,10 +34,10 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
     Button button;
     ImageView back;
     static RecyclerView.Adapter adapter;
-    static ArrayList<Model> dessertList;
+    static ArrayList<ModelCart> dessertList;
     static ArrayList<ModelCart> dessertListCart;
     Database db;
-    DatabaseCart dbc;
+    //DatabaseCart dbc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,7 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
         back = findViewById(R.id.imageView17);
 
         db = new Database(this);
-        dbc = new DatabaseCart(this);
+        //dbc = new DatabaseCart(this);
 
 
         recyclerView.setHasFixedSize(true);
@@ -80,17 +81,22 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
             }
         });
 
-        dessertList=db.getCartDESSERT();
+        dessertList=db.getAllDESSERTCart();
         adapter = new AdapterCart(this,dessertList);
         recyclerView.setAdapter(adapter);
 
 
-        dbc.addDessert(new ModelCart("0","11","2"));
+        //dbc.addDessert(new ModelCart("0","11","2"));
 
-        dessertListCart=dbc.getAllDESSERT();
+
+
+
+        //Log.d("ttg", "tgv : "+dbc.checkTableExists());
+
+        dessertListCart=db.getAllDESSERTCart();
         for (ModelCart model : dessertListCart){
 
-            Log.d("TAG", "onCreate: "+model.getId()+" "+model.getIdd()+" "+model.getPrice()+" "+model.getCount());
+            Log.d("TAG", "Cart Activty: id "+model.getId()+" idd "+model.getIdd()+" price "+model.getPrice()+" count "+model.getCount());
         }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +109,7 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
 
 
     }
+
 
 
 

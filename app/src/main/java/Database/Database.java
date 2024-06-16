@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import Model.Model;
 import Utel.UtelsCart;
 import Utel.UtelsDB;
-
+import Model.ModelCart;
 public class Database extends SQLiteOpenHelper {
 
     public Database(@Nullable Context context) {
@@ -32,11 +32,19 @@ public class Database extends SQLiteOpenHelper {
                 UtelsDB.KEY_CART+"  TEXT)";
         db.execSQL(CREAT_TABLE);
 
+        CREAT_TABLE="CREATE TABLE "+ UtelsDB.DESSERT_TABLE_CART+" ("+
+                UtelsDB.KEY_ID_CART+" INTEGER PRIMARY KEY,"+
+                UtelsDB.KEY_IDD_CART+" TEXT,"+
+                UtelsDB.KEY_COUNT_CART+" TEXT,"+
+                UtelsDB.KEY_PRICE_CART+"  TEXT)";
+        db.execSQL(CREAT_TABLE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+UtelsDB.DESSERT_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS "+UtelsDB.DESSERT_TABLE_CART);
         onCreate(db);
     }
 
@@ -217,11 +225,87 @@ public class Database extends SQLiteOpenHelper {
 
 
 
+    public void addDessertCart(ModelCart model){
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(UtelsDB.KEY_IDD_CART, model.getIdd());
+        contentValues.put(UtelsDB.KEY_COUNT_CART, model.getCount());
+        contentValues.put(UtelsDB.KEY_PRICE_CART, model.getPrice());
+        sqLiteDatabase.insert(UtelsDB.DESSERT_TABLE_CART,null,contentValues);
+        sqLiteDatabase.close();
+
+    }
+
+
+    public ArrayList<ModelCart> getAllDESSERTCart(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        ArrayList<ModelCart> dessertList = new ArrayList<ModelCart>();
+        String getAll = "SELECT * FROM "+UtelsDB.DESSERT_TABLE_CART;
+        Cursor cursor = sqLiteDatabase.rawQuery(getAll,null);
+
+        if (cursor.moveToFirst())
+            do {
+                ModelCart model = new ModelCart();
+                model.setId(Integer.parseInt(cursor.getString(0)));
+                model.setIdd(cursor.getString(1));
+                model.setCount(cursor.getString(3));
+                model.setPrice(cursor.getString(2));
+                dessertList.add(model);
+            }while (cursor.moveToNext());
+
+        return dessertList;
+
+    }
+
+
+    public Model getDessertCartById(int id){
+
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query(UtelsDB.DESSERT_TABLE,
+                new String[]{UtelsDB.KEY_ID, UtelsDB.KEY_NAME, UtelsDB.KEY_PRICE, UtelsDB.KEY_IMG,UtelsDB.KEY_FAVORITE,UtelsDB.KEY_CART}, UtelsDB.KEY_ID+" =? AND "+ UtelsDB.KEY_CART+" =? ",
+                new String[]{String.valueOf(id),"true"},
+                null,null,null,null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            Model model = new Model(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Boolean.parseBoolean(cursor.getString(4)),
+                    Boolean.parseBoolean(cursor.getString(5)));
+            cursor.close();
+            return model;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+
+    }
+
+
+    public int updateDessertCart(ModelCart model){
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(UtelsDB.KEY_IDD_CART, model.getIdd());
+        contentValues.put(UtelsDB.KEY_COUNT_CART, model.getCount());
+        contentValues.put(UtelsDB.KEY_PRICE_CART, model.getPrice());
+
+        int result = sqLiteDatabase.update(UtelsDB.DESSERT_TABLE_CART,contentValues,UtelsDB.KEY_ID_CART+"=?",new String[]{String.valueOf(model.getId())});
+        sqLiteDatabase.close();
+        return result;
+    }
 
 
 
-
-
+    public int deleteDessertCart(ModelCart model){
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        int result = sqLiteDatabase.delete(UtelsDB.DESSERT_TABLE_CART,UtelsDB.KEY_ID_CART+"=?",new String[]{String.valueOf(model.getId())});
+        sqLiteDatabase.close();
+        return result;
+    }
 
 
 

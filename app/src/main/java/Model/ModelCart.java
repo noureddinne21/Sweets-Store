@@ -7,14 +7,14 @@ public class ModelCart {
     private String price;
     private String count;
 
-    public ModelCart(int id, String idd, String price, String count) {
+    public ModelCart(int id, String idd, String count,String price) {
         this.id = id;
         this.idd = idd;
         this.price = price;
         this.count = count;
     }
 
-    public ModelCart(String idd, String price, String count) {
+    public ModelCart(String idd, String count,String price) {
         this.idd = idd;
         this.price = price;
         this.count = count;

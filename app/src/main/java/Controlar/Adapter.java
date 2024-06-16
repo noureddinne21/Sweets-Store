@@ -29,7 +29,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import Database.Database;
-import Database.DatabaseCart;
 import Model.Model;
 import Model.ModelCart;
 
@@ -37,7 +36,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
     Context context;
     ArrayList<Model> dessertList;
     Database db ;
-    DatabaseCart dbc ;
 
     public Adapter(Context context, ArrayList<Model> dessertList) {
         this.context = context;
@@ -70,7 +68,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
         }
 
         db=new Database(context);
-        dbc = new DatabaseCart(context);
 
 
         holder.imgDessert.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +113,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
                 dessertList.set(position, model);
                 notifyItemChanged(position);
 
-                dbc.addDessert(new ModelCart(String.valueOf(model.getId()), model.getPrice(),"0"));
+                db.addDessertCart(new ModelCart(String.valueOf(model.getId()), model.getPrice(),"1"));
 
                 //Log.d("dessert", "onClick: "+model.getId()+" "+model.getName()+" "+model.getPrice()+" "+model.getImg()+" "+model.getFavorite()+" "+model.getCart());
 
