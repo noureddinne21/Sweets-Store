@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.activity.OnBackPressedDispatcherOwner;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,17 +23,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import Controlar.Adapter;
+import Controlar.AdapterFavorate;
 import Database.Database;
 import Model.Model;
 
-public class Favourite_Dessert_Activity extends AppCompatActivity {
-
-    ImageView home,cart,search,profail;
+public class Favourite_Dessert_Activity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
+    private OnBackPressedCallback callback;
+    ImageView home,cart,search,profail,back;
     RecyclerView recyclerView;
-    static RecyclerView.Adapter adapter;
+    static AdapterFavorate adapter;
     static ArrayList<Model> dessertList;
     Database db;
-    Context context= this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,7 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
         cart = findViewById(R.id.imageView_cart);
         search = findViewById(R.id.imageView_search);
         profail = findViewById(R.id.imageView_profaile);
+        back = findViewById(R.id.imageView17);
         recyclerView = findViewById(R.id.recyclerView);
 
         db = new Database(this);
@@ -49,22 +54,30 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
 
         dessertList=db.getFavorateDESSERT();
 
-        for (Model model : dessertList){
-            Log.d("favorate dessert", "onClick: "+model.getId()+" "+model.getName()+" "+model.getPrice()+" "+model.getImg()+" "+model.getFavorite()+" "+model.getCart());
-        }
-
-
-        Toast.makeText(context, String.valueOf(dessertList.size()), Toast.LENGTH_SHORT).show();
-
-
-        adapter = new Adapter(context,dessertList);
+        adapter = new AdapterFavorate(this,dessertList);
         recyclerView.setAdapter(adapter);
 
 
+        callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+
+                Intent intent = new Intent(Favourite_Dessert_Activity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        };
 
 
-
-
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Favourite_Dessert_Activity.this, HomeActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +85,7 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
 
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, HomeActivity.class);
                 startActivity(intent);
+                finish();
 
             }
         });
@@ -81,7 +95,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+                Intent intent = new Intent(Favourite_Dessert_Activity.this, CartActivity.class);
+                startActivity(intent);
+                finish();
 
             }
         });
@@ -91,7 +107,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+                Intent intent = new Intent(Favourite_Dessert_Activity.this, SearchActivity.class);
+                startActivity(intent);
+                finish();
 
             }
         });
@@ -101,7 +119,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
+                Intent intent = new Intent(Favourite_Dessert_Activity.this, ProfileActivity.class);
+                startActivity(intent);
+                finish();
 
             }
         });

@@ -9,9 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import Model.Model;
+import Utel.UtelsCart;
 import Utel.UtelsDB;
 
 public class Database extends SQLiteOpenHelper {
@@ -113,7 +113,7 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(UtelsDB.KEY_PRICE, model.getPrice());
         contentValues.put(UtelsDB.KEY_IMG, model.getImg());
         contentValues.put(UtelsDB.KEY_FAVORITE, String.valueOf(model.getFavorite()));
-        contentValues.put(UtelsDB.KEY_CART, model.getCart());
+        contentValues.put(UtelsDB.KEY_CART, String.valueOf(model.getCart()));
 
         int result = sqLiteDatabase.update(UtelsDB.DESSERT_TABLE,contentValues,UtelsDB.KEY_ID+"=?",new String[]{String.valueOf(model.getId())});
         sqLiteDatabase.close();
@@ -164,7 +164,56 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Model> getCartDESSERT(){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        ArrayList<Model> dessertList = new ArrayList<Model>();
 
+        Cursor cursor = sqLiteDatabase.query(UtelsDB.DESSERT_TABLE,
+                new String[]{UtelsDB.KEY_ID,UtelsDB.KEY_NAME,UtelsDB.KEY_PRICE,UtelsDB.KEY_IMG,UtelsDB.KEY_FAVORITE,UtelsDB.KEY_CART},
+                UtelsDB.KEY_CART + "=?",
+                new String[]{String.valueOf("true")}, null, null, null, null);
+
+        if (cursor.moveToFirst())
+            do {
+                Model model = new Model();
+                model.setId(Integer.parseInt(cursor.getString(0)));
+                model.setName(cursor.getString(1));
+                model.setPrice(cursor.getString(2));
+                model.setImg(cursor.getString(3));
+                model.setFavorite(Boolean.parseBoolean(cursor.getString(4)));
+                model.setCart(Boolean.parseBoolean(cursor.getString(5)));
+                dessertList.add(model);
+            }while (cursor.moveToNext());
+
+        return dessertList;
+
+    }
+
+
+    public ArrayList<Model> searchDESSERT(String s){
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
+        ArrayList<Model> dessertList = new ArrayList<Model>();
+
+        String query = "SELECT * FROM "+UtelsDB.DESSERT_TABLE+" WHERE "+ UtelsDB.KEY_NAME +" LIKE '%" + s + "%'";
+
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor.moveToFirst())
+            do {
+                Model model = new Model();
+                model.setId(Integer.parseInt(cursor.getString(0)));
+                model.setName(cursor.getString(1));
+                model.setPrice(cursor.getString(2));
+                model.setImg(cursor.getString(3));
+                model.setFavorite(Boolean.parseBoolean(cursor.getString(4)));
+                model.setCart(Boolean.parseBoolean(cursor.getString(5)));
+                dessertList.add(model);
+            }while (cursor.moveToNext());
+
+        return dessertList;
+
+    }
 
 
 

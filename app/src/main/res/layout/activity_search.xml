@@ -26,15 +26,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="9"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:padding="8dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -50,17 +51,32 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="8dp"
-                        android:text="Your Favorites"
+                        android:text="Search"
                         android:textSize="20sp"
                         android:textStyle="bold" />
+
                 </LinearLayout>
+
+                <EditText
+                    android:id="@+id/editTextText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:drawableRight="@drawable/baseline_search_24"
+                    android:ems="10"
+                    android:hint="Name Dessert"
+                    android:inputType="text"
+                    android:padding="10dp" />
 
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/linear_results"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:background="@color/white"
                 android:orientation="vertical">
 
@@ -72,6 +88,32 @@
                     tools:listitem="@layout/item_list_dessert" />
 
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear_no_results"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:paddingTop="150dp">
+
+                <ImageView
+                    android:id="@+id/imageView4"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    app:srcCompat="@drawable/no_results" />
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="No Results Found."
+                    android:textColor="@color/Pink"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -105,7 +147,7 @@
                     android:id="@+id/imageView_favourite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:srcCompat="@drawable/favorite_full" />
+                    app:srcCompat="@drawable/favourite_blak" />
             </LinearLayout>
 
             <LinearLayout
@@ -119,7 +161,7 @@
                     android:id="@+id/imageView_search"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    app:srcCompat="@drawable/search_black" />
+                    app:srcCompat="@drawable/search_pink" />
             </LinearLayout>
 
             <LinearLayout

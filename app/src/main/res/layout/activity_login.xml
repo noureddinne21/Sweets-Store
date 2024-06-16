@@ -96,16 +96,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:background="@drawable/backgroun_item_cart"
+                android:orientation="horizontal"
+                android:padding="10dp">
 
                 <EditText
-                    android:id="@+id/editTextTextName"
+                    android:id="@+id/editTextText_singup_email"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:ems="10"
                     android:hint="exp@gmail.com"
                     android:inputType="textEmailAddress"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -142,16 +146,19 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:background="@drawable/backgroun_item_cart"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
 
                     <EditText
-                        android:id="@+id/editTextTextPassword"
+                        android:id="@+id/editTextText_singup_Password"
                         android:layout_width="wrap_content"
-                        android:layout_height="55dp"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
                         android:ems="10"
                         android:hint="123456"
                         android:inputType="text|textPassword"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -161,11 +168,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/imageView5"
+                        android:id="@+id/imageView_login_show"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_margin="5dp"
-                        app:srcCompat="@drawable/visibility_off" />
+                        app:srcCompat="@drawable/visibility_on" />
                 </LinearLayout>
 
             </LinearLayout>
