@@ -41,6 +41,7 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     int count = 0 ;
     Double total = 0.0;
     Model model;
+    ModelCart modelCart;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -152,8 +153,13 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                         model.setCart(newCartStatus);
                         db.updateDessert(model);
 
-                        Log.d("TAG", "ShowDessertActivity : id "+model.getId()+" price "+total+" count "+count);
-                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()), String.valueOf(total),String.valueOf(count)));
+                        Toast.makeText(ShowDessertActivity.this, String.valueOf(count), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(ShowDessertActivity.this, String.valueOf(model.getId()), Toast.LENGTH_SHORT).show();
+
+                        modelCart.setIdd(String.valueOf(model.getId()));
+                        modelCart.setPrice(String.valueOf(total));
+                        modelCart.setCount(String.valueOf(editTextCustom));
+                        db.addDessertCart(modelCart);
 
                         Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
                         startActivity(intent);
@@ -168,7 +174,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 }
             });
 
-        }
 
 
         button1.setOnClickListener(new View.OnClickListener() {
@@ -252,10 +257,11 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.backgroun_item_cart);
                 editTextCustom.setBackgroundResource(R.drawable.background_button_checkout);
 
-                if (!s.toString().isEmpty()){
-                    count = Integer.parseInt(String.valueOf(editTextCustom.getText()));
-                }else {
+
+                if (editTextCustom.getText().toString().isEmpty()){
                     count = 0;
+                }else {
+                    count = Integer.parseInt(String.valueOf(editTextCustom.getText()));
                 }
 
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
@@ -271,6 +277,7 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         });
 
 
+        }
 
 
 

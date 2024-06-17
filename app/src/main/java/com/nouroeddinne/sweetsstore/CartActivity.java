@@ -34,7 +34,7 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
     Button button;
     ImageView back;
     static RecyclerView.Adapter adapter;
-    static ArrayList<ModelCart> dessertList;
+    //static ArrayList<ModelCart> dessertList;
     static ArrayList<ModelCart> dessertListCart;
     Database db;
     //DatabaseCart dbc;
@@ -81,8 +81,8 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
             }
         });
 
-        dessertList=db.getAllDESSERTCart();
-        adapter = new AdapterCart(this,dessertList);
+        dessertListCart=db.getAllDESSERTCart();
+        adapter = new AdapterCart(this,dessertListCart);
         recyclerView.setAdapter(adapter);
 
 

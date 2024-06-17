@@ -56,9 +56,10 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         //total+=Double.parseDouble(model.getPrice());
 
             holder.textName.setText(model.getName());
+            Glide.with(context).load(model.getImg()).into(holder.imgDessert);
+
             holder.textPrice.setText(modelCart.getPrice());
             holder.textCount.setText(modelCart.getCount());
-            Glide.with(context).load(model.getImg()).into(holder.imgDessert);
 
         //Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
 
