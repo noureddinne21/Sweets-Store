@@ -27,11 +27,11 @@ import Model.ModelCart;
 
 public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
-    Context context;
+    private Context context;
     //ArrayList<Model> dessertList;
-    ArrayList<ModelCart> dessertListCart;
-    Database db ;
-    public static Double total=0.0;
+    private ArrayList<ModelCart> dessertListCart;
+    private Database db ;
+    private static Double total=0.0;
     public AdapterCart(Context context, ArrayList<ModelCart> dessertListCart) {
         this.context = context;
         this.dessertListCart = dessertListCart;
@@ -53,7 +53,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         ModelCart modelCart = dessertListCart.get(position);
         Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
 
-        //total+=Double.parseDouble(model.getPrice());
+        total+=Double.parseDouble(model.getPrice());
 
             holder.textName.setText(model.getName());
             Glide.with(context).load(model.getImg()).into(holder.imgDessert);
@@ -61,7 +61,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
             holder.textPrice.setText(modelCart.getPrice());
             holder.textCount.setText(modelCart.getCount());
 
-        //Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, " count " +String.valueOf(modelCart.getCount())+" price "+String.valueOf(modelCart.getPrice()), Toast.LENGTH_SHORT).show();
 
 
         holder.imgDessert.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +96,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 int count= Integer.parseInt(modelCart.getCount());
                 count++;
                 Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+
                 modelCart.setCount(String.valueOf(count));
                 modelCart.setPrice(String.valueOf(price));
                 db.updateDessertCart(modelCart);
@@ -104,7 +105,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 holder.textPrice.setText(String.valueOf(price));
 
                 //total+=sum;
-                //Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -115,13 +116,14 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 int count= Integer.parseInt(modelCart.getCount());
                 if (count>1){
                     count--;
-                Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
-                modelCart.setCount(String.valueOf(count));
-                modelCart.setPrice(String.valueOf(price));
-                db.updateDessertCart(modelCart);
+                    Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+                    modelCart.setCount(String.valueOf(count));
+                    modelCart.setPrice(String.valueOf(price));
+                    db.updateDessertCart(modelCart);
 
-                holder.textCount.setText(String.valueOf(count));
-                holder.textPrice.setText(String.valueOf(price));
+                    holder.textCount.setText(String.valueOf(count));
+                    holder.textPrice.setText(String.valueOf(price));
+                    Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
                 }
 
 //                DecimalFormat df = new DecimalFormat("#.##");
@@ -153,8 +155,8 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
 
             textName = itemView.findViewById(R.id.textView_item_cart_name);
-            textPrice = itemView.findViewById(R.id.textView_item_cart_price);
-            textCount = itemView.findViewById(R.id.textView_item_cart_count);
+            textPrice = itemView.findViewById(R.id.textView_item_cart_priceItem);
+            textCount = itemView.findViewById(R.id.textView_item_cart_counts);
             imgDessert = itemView.findViewById(R.id.imageView_item_cart_img);
             imgDell = itemView.findViewById(R.id.imageViewimageView_item_cart_dell);
             imgPlus = itemView.findViewById(R.id.imageView_item_cart_plus);

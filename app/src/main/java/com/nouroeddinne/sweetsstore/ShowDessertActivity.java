@@ -38,7 +38,7 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     EditText editTextCustom;
     Database db;
     ArrayList<Model> dessertList;
-    int count = 0 ;
+    private int itemCount = 0 ;
     Double total = 0.0;
     Model model;
     ModelCart modelCart;
@@ -150,16 +150,12 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
 
                     if (newCartStatus) {
 
+                        Toast.makeText(ShowDessertActivity.this, String.valueOf(model.getId())+", itemCount "+String.valueOf(itemCount)+", total"+String.valueOf(total), Toast.LENGTH_SHORT).show();
+
                         model.setCart(newCartStatus);
                         db.updateDessert(model);
+                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(total)));
 
-                        Toast.makeText(ShowDessertActivity.this, String.valueOf(count), Toast.LENGTH_SHORT).show();
-                        //Toast.makeText(ShowDessertActivity.this, String.valueOf(model.getId()), Toast.LENGTH_SHORT).show();
-
-                        modelCart.setIdd(String.valueOf(model.getId()));
-                        modelCart.setPrice(String.valueOf(total));
-                        modelCart.setCount(String.valueOf(editTextCustom));
-                        db.addDessertCart(modelCart);
 
                         Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
                         startActivity(intent);
@@ -185,8 +181,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.backgroun_item_cart);
                 editTextCustom.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-                count = 1;
-                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
+                itemCount = 1;
+                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
 
             }
@@ -201,8 +197,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.backgroun_item_cart);
                 editTextCustom.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-                count = 3;
-                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
+                itemCount = 3;
+                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
 
 
@@ -218,8 +214,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.backgroun_item_cart);
                 editTextCustom.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-                count = 5;
-                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
+                itemCount = 5;
+                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
 
             }
@@ -234,8 +230,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.background_button_checkout);
                 editTextCustom.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-                count = 10;
-                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
+                itemCount = 10;
+                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
 
             }
@@ -259,12 +255,12 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
 
 
                 if (editTextCustom.getText().toString().isEmpty()){
-                    count = 0;
+                    itemCount = 0;
                 }else {
-                    count = Integer.parseInt(String.valueOf(editTextCustom.getText()));
+                    itemCount = Integer.parseInt(String.valueOf(editTextCustom.getText()));
                 }
 
-                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*count));
+                total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
 
             }

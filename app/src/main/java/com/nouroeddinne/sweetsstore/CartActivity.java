@@ -103,6 +103,12 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
             @Override
             public void onClick(View v) {
 
+                double s = 0.0;
+                for (ModelCart model : dessertListCart){
+                    s+=Double.valueOf(model.getPrice());
+                }
+                Toast.makeText(CartActivity.this, String.valueOf(s), Toast.LENGTH_SHORT).show();
+
             }
         });
 

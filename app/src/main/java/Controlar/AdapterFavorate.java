@@ -65,7 +65,7 @@ public class AdapterFavorate extends Adapter{
                 dessertList.remove(position);
                 notifyItemRemoved(position);
 
-                db.addDessertCart(new ModelCart(String.valueOf(model.getId()), model.getPrice(),"1"));
+                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",model.getPrice()));
 
 
             }

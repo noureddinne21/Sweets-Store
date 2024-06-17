@@ -249,8 +249,8 @@ public class Database extends SQLiteOpenHelper {
                 ModelCart model = new ModelCart();
                 model.setId(Integer.parseInt(cursor.getString(0)));
                 model.setIdd(cursor.getString(1));
-                model.setCount(cursor.getString(3));
-                model.setPrice(cursor.getString(2));
+                model.setCount(cursor.getString(2));
+                model.setPrice(cursor.getString(3));
                 dessertList.add(model);
             }while (cursor.moveToNext());
 

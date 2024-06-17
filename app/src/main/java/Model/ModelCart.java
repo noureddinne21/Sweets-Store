@@ -10,14 +10,14 @@ public class ModelCart {
     public ModelCart(int id, String idd, String count,String price) {
         this.id = id;
         this.idd = idd;
-        this.price = price;
         this.count = count;
+        this.price = price;
     }
 
     public ModelCart(String idd, String count,String price) {
         this.idd = idd;
-        this.price = price;
         this.count = count;
+        this.price = price;
     }
 
     public ModelCart() {

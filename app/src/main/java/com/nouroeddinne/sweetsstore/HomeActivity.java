@@ -45,9 +45,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-//
-//        db.addDessert(new Model("Cake","22.99","https://i.ibb.co/jDbTkv0/cake.png",false,false));
-//        db.addDessert(new Model("Cake","13.99","https://i.ibb.co/5vS87y1/cake-1.png",false,false));
+
+        db.addDessert(new Model("Cake","2","https://i.ibb.co/jDbTkv0/cake.png",false,false));
+        db.addDessert(new Model("Cake","1","https://i.ibb.co/5vS87y1/cake-1.png",false,false));
 //        db.addDessert(new Model("Cake","9.99","https://i.ibb.co/yy5PKkS/cake-2.png",false,false));
 //        db.addDessert(new Model("Cookies","12.99","https://i.ibb.co/ZxQcQkw/cookies.png",false,false));
 //        db.addDessert(new Model("Croissant","11.99","https://i.ibb.co/Y2T7n5F/croissant.png",false,false));
@@ -63,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
 //        db.addDessert(new Model("Tart","6.99","https://i.ibb.co/JcKmNbr/tart.png",false,false));
 //        db.addDessert(new Model("Waffles","29.99","https://i.ibb.co/TqN6nBC/waffles.png",false,false));
 //        db.addDessert(new Model("Dango","19.99","https://i.ibb.co/NnP0PcF/dango.png",false,false));
-//
+
 
 
 
