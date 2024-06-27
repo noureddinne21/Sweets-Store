@@ -34,7 +34,8 @@
                         android:id="@+id/imageView_item_cart_img"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        app:srcCompat="@drawable/gelato" />
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@drawable/chocolategg" />
                 </androidx.cardview.widget.CardView>
 
             </LinearLayout>

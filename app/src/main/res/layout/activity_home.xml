@@ -49,9 +49,12 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/linear_capcake"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
+            android:background="@drawable/background_button_checkout"
             android:orientation="vertical">
 
             <ImageView
@@ -60,19 +63,21 @@
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/cupcake" />
 
-            <ToggleButton
-                android:id="@+id/toggleButton1"
+            <LinearLayout
+                android:id="@+id/linear_capcake_white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Cupcake"
-                android:textOff="Cupcake"
-                android:textOn="Cupcake" />
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:orientation="horizontal"></LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_dounet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -80,19 +85,23 @@
                 android:id="@+id/imageView7"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@drawable/null_background"
                 app:srcCompat="@drawable/donut" />
 
-            <ToggleButton
-                android:id="@+id/toggleButton2"
+            <LinearLayout
+                android:id="@+id/linear_dounet_white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Donut"
-                android:textOff="Donut" />
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:orientation="horizontal"></LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_cookies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -100,20 +109,23 @@
                 android:id="@+id/imageView8"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/gelato" />
+                app:srcCompat="@drawable/cookies" />
 
-            <ToggleButton
-                android:id="@+id/toggleButton3"
+            <LinearLayout
+                android:id="@+id/linear_cookies_white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ToggleButton"
-                android:textOff="Gelato"
-                android:textOn="Gelato" />
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:orientation="horizontal"
+                tools:ignore="DuplicateIds"></LinearLayout>
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linear_candy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -121,14 +133,15 @@
                 android:id="@+id/imageView9"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                app:srcCompat="@drawable/dessert" />
+                app:srcCompat="@drawable/candy" />
 
-            <ToggleButton
-                android:id="@+id/toggleButton4"
+            <LinearLayout
+                android:id="@+id/linear_candy_white"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textOff="Dessert"
-                android:textOn="Dessert" />
+                android:layout_height="2dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                android:orientation="horizontal"></LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
@@ -172,6 +185,8 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/home_pink" />
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -186,6 +201,20 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/favourite_blak" />
+
+                <TextView
+                    android:id="@+id/textView_notif_faverate"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@drawable/custom_notification_masseg"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="7sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -214,6 +243,21 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     app:srcCompat="@drawable/cart_black" />
+
+                <TextView
+                    android:id="@+id/textView_notif_cart"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginTop="-10dp"
+                    android:background="@drawable/custom_notification_masseg"
+                    android:gravity="center"
+                    android:text="8"
+                    android:textColor="@color/white"
+                    android:textSize="7sp"
+                    android:textStyle="bold" />
+
+
             </LinearLayout>
 
             <LinearLayout

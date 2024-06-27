@@ -6,21 +6,24 @@ public class Model {
     private String name;
     private String price;
     private String img;
+    private String type;
     private boolean favorite;
     private boolean cart;
 
-    public Model(int id, String name, String price, String img,boolean favorite,boolean cart) {
+    public Model(int id, String name, String price, String type, String img,boolean favorite,boolean cart) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.type = type;
         this.img = img;
         this.favorite = favorite;
         this.cart = cart;
     }
 
-    public Model(String name, String price, String img,boolean favorite,boolean cart) {
+    public Model(String name, String price, String type,String img,boolean favorite,boolean cart) {
         this.name = name;
         this.price = price;
+        this.type = type;
         this.img = img;
         this.favorite = favorite;
         this.cart = cart;
@@ -32,6 +35,14 @@ public class Model {
     }
 
     public Model() {
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public int getId() {

@@ -5,14 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
@@ -20,12 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.bumptech.glide.Glide;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
@@ -37,7 +32,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     Button button1,button3,button5,button10,buttonAddToCart;
     EditText editTextCustom;
     Database db;
-    ArrayList<Model> dessertList;
     private int itemCount = 0 ;
     Double total = 0.0;
     Model model;
@@ -78,24 +72,19 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         db = new Database(this);
         DecimalFormat df = new DecimalFormat("#.##");
 
-
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-
-                Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
+                Intent intent = new Intent(ShowDessertActivity.this,HomeActivity.class);
                 startActivity(intent);
-                finish();
             }
         };
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
+                Intent intent = new Intent(ShowDessertActivity.this,HomeActivity.class);
                 startActivity(intent);
-                finish();
             }
         });
 
@@ -104,15 +93,12 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         if (extras!=null){
 
             int p = extras.getInt("position");
-
             Glide.with(this).load(db.getDessertById(p).getImg()).into(imgDessert);
-
             if (db.getDessertById(p).getFavorite()){
                 imgFavorate.setImageResource(R.drawable.favorite_full);
             }else {
                 imgFavorate.setImageResource(R.drawable.favorite_empty);
             }
-
             textName.setText(db.getDessertById(p).getName());
             textPrice.setText(db.getDessertById(p).getPrice());
 
@@ -120,6 +106,7 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                     db.getDessertById(p).getId(),
                     db.getDessertById(p).getName(),
                     db.getDessertById(p).getPrice(),
+                    db.getDessertById(p).getType(),
                     db.getDessertById(p).getImg(),
                     db.getDessertById(p).getFavorite(),
                     db.getDessertById(p).getCart());
@@ -129,10 +116,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 public void onClick(View v) {
 
                     boolean newFavoriteStatus = !db.getDessertById(p).getFavorite();
-
                     model.setFavorite(newFavoriteStatus);
                     db.updateDessert(model);
-
                     if (newFavoriteStatus) {
                         imgFavorate.setImageResource(R.drawable.favorite_full);
                     } else {
@@ -149,18 +134,13 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                     boolean newCartStatus = !db.getDessertById(p).getCart();
 
                     if (newCartStatus) {
-
-                        Toast.makeText(ShowDessertActivity.this, String.valueOf(model.getId())+", itemCount "+String.valueOf(itemCount)+", total"+String.valueOf(total), Toast.LENGTH_SHORT).show();
-
                         model.setCart(newCartStatus);
                         db.updateDessert(model);
-                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(total)));
-
+                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(model.getPrice()),String.valueOf(total)));
 
                         Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
                         startActivity(intent);
                         finish();
-
                     } else {
                         Toast.makeText(ShowDessertActivity.this, "This Dessert Is Already In Cart", Toast.LENGTH_SHORT).show();
 
@@ -184,7 +164,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 itemCount = 1;
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
-
             }
         });
 
@@ -200,8 +179,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 itemCount = 3;
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
-
-
             }
         });
 
@@ -217,7 +194,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 itemCount = 5;
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
-
             }
         });
 
@@ -233,7 +209,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 itemCount = 10;
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
-
             }
         });
 
@@ -253,16 +228,13 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 button10.setBackgroundResource(R.drawable.backgroun_item_cart);
                 editTextCustom.setBackgroundResource(R.drawable.background_button_checkout);
 
-
                 if (editTextCustom.getText().toString().isEmpty()){
                     itemCount = 0;
                 }else {
                     itemCount = Integer.parseInt(String.valueOf(editTextCustom.getText()));
                 }
-
                 total= Double.valueOf(df.format(Double.valueOf(model.getPrice())*itemCount));
                 textTotal.setText(String.valueOf(total));
-
             }
 
             @Override

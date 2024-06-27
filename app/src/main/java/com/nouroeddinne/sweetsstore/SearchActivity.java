@@ -5,13 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
@@ -21,9 +18,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
 import Controlar.Adapter;
 import Database.Database;
 import Model.Model;
@@ -49,8 +44,6 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
             return insets;
         });
 
-
-
         recyclerView = findViewById(R.id.recyclerView);
         editText = findViewById(R.id.editTextText);
         linear_results = findViewById(R.id.linear_results);
@@ -68,40 +61,31 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-
         callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-
                 Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         };
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
                 dessertList=db.searchDESSERT(String.valueOf(s));
-
                 if(dessertList.size()>0){
                     linear_results.setVisibility(View.VISIBLE);
                     linear_no_results.setVisibility(View.GONE);
@@ -116,20 +100,16 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
 
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -137,11 +117,9 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(SearchActivity.this, CartActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -149,11 +127,9 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(SearchActivity.this, Favourite_Dessert_Activity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -161,58 +137,13 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         profail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(SearchActivity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

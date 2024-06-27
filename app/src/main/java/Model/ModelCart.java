@@ -4,23 +4,34 @@ public class ModelCart {
 
     private int id;
     private String idd;
-    private String price;
     private String count;
+    private String price;
+    private String totalPrice;
 
-    public ModelCart(int id, String idd, String count,String price) {
+    public ModelCart(int id, String idd, String count,String price,String totalPrice) {
         this.id = id;
         this.idd = idd;
         this.count = count;
         this.price = price;
+        this.totalPrice = totalPrice;
     }
 
-    public ModelCart(String idd, String count,String price) {
+    public ModelCart(String idd, String count,String price,String totalPrice) {
         this.idd = idd;
         this.count = count;
         this.price = price;
+        this.totalPrice = totalPrice;
     }
 
     public ModelCart() {
+    }
+
+    public String getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(String totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public String getCount() {

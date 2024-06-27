@@ -1,28 +1,14 @@
 package com.nouroeddinne.sweetsstore;
-
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
-
-import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
-
-import Controlar.Adapter;
 import Controlar.AdapterFavorate;
 import Database.Database;
 import Model.Model;
@@ -57,15 +43,12 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         adapter = new AdapterFavorate(this,dessertList);
         recyclerView.setAdapter(adapter);
 
-
         callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
             public void handleOnBackPressed() {
-
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         };
 
@@ -82,11 +65,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -94,11 +75,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, CartActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -106,11 +85,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, SearchActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 
@@ -118,11 +95,9 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         profail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Favourite_Dessert_Activity.this, ProfileActivity.class);
                 startActivity(intent);
                 finish();
-
             }
         });
 

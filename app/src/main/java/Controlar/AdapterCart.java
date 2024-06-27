@@ -3,24 +3,18 @@ package Controlar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.nouroeddinne.sweetsstore.R;
 import com.nouroeddinne.sweetsstore.ShowDessertActivity;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
@@ -28,10 +22,8 @@ import Model.ModelCart;
 public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     private Context context;
-    //ArrayList<Model> dessertList;
     private ArrayList<ModelCart> dessertListCart;
     private Database db ;
-    private static Double total=0.0;
     public AdapterCart(Context context, ArrayList<ModelCart> dessertListCart) {
         this.context = context;
         this.dessertListCart = dessertListCart;
@@ -46,23 +38,18 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCart.ViweHolder holder, int position) {
+
         db = new Database(context);
-        DecimalFormat df = new DecimalFormat("#.##");
+        int currentPosition =holder.getAdapterPosition();
 
-
-        ModelCart modelCart = dessertListCart.get(position);
+        ModelCart modelCart = dessertListCart.get(currentPosition);
         Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
 
-        total+=Double.parseDouble(model.getPrice());
+        holder.textName.setText(shorterWord(model.getName(),30));
+        Glide.with(context).load(model.getImg()).into(holder.imgDessert);
 
-            holder.textName.setText(model.getName());
-            Glide.with(context).load(model.getImg()).into(holder.imgDessert);
-
-            holder.textPrice.setText(modelCart.getPrice());
-            holder.textCount.setText(modelCart.getCount());
-
-            //Toast.makeText(context, " count " +String.valueOf(modelCart.getCount())+" price "+String.valueOf(modelCart.getPrice()), Toast.LENGTH_SHORT).show();
-
+        holder.textPrice.setText(modelCart.getPrice());
+        holder.textCount.setText(modelCart.getCount());
 
         holder.imgDessert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,12 +66,13 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
             @Override
             public void onClick(View v) {
 
+                int currentPosition =holder.getAdapterPosition();
                 boolean newCartStatus = !model.getCart();
                 model.setCart(newCartStatus);
                 db.updateDessert(model);
                 db.deleteDessertCart(modelCart);
-                dessertListCart.remove(position);
-                notifyItemRemoved(position);
+                dessertListCart.remove(currentPosition);
+                notifyItemRemoved(currentPosition);
 
             }
         });
@@ -95,17 +83,15 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
                 int count= Integer.parseInt(modelCart.getCount());
                 count++;
-                Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+                Double price = Double.valueOf(count*Double.valueOf(model.getPrice()));
 
                 modelCart.setCount(String.valueOf(count));
-                modelCart.setPrice(String.valueOf(price));
+                modelCart.setTotalPrice(String.valueOf(price));
                 db.updateDessertCart(modelCart);
+                notifyDataSetChanged();
 
                 holder.textCount.setText(String.valueOf(count));
                 holder.textPrice.setText(String.valueOf(price));
-
-                //total+=sum;
-                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -113,27 +99,20 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         holder.imgMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 int count= Integer.parseInt(modelCart.getCount());
                 if (count>1){
                     count--;
-                    Double price = Double.valueOf(df.format(count*Double.valueOf(model.getPrice())));
+                    Double price = Double.valueOf(count*Double.valueOf(model.getPrice()));
                     modelCart.setCount(String.valueOf(count));
-                    modelCart.setPrice(String.valueOf(price));
+                    modelCart.setTotalPrice(String.valueOf(price));
                     db.updateDessertCart(modelCart);
+                    notifyDataSetChanged();
 
                     holder.textCount.setText(String.valueOf(count));
                     holder.textPrice.setText(String.valueOf(price));
-                    Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
+
                 }
-
-//                DecimalFormat df = new DecimalFormat("#.##");
-//                int count = Integer.parseInt(holder.textCount.getText().toString())-1;
-//                Double sum = Double.valueOf(df.format(Double.parseDouble(model.getPrice())*count));
-//                holder.textCount.setText(String.valueOf(count));
-//                holder.textPrice.setText(String.valueOf(sum));
-//                total+=sum;
-//                Toast.makeText(context, String.valueOf(total), Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -153,7 +132,6 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         public ViweHolder(@NonNull View itemView) {
             super(itemView);
 
-
             textName = itemView.findViewById(R.id.textView_item_cart_name);
             textPrice = itemView.findViewById(R.id.textView_item_cart_priceItem);
             textCount = itemView.findViewById(R.id.textView_item_cart_counts);
@@ -162,11 +140,19 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
             imgPlus = itemView.findViewById(R.id.imageView_item_cart_plus);
             imgMinus = itemView.findViewById(R.id.imageView_item_cart_minus);
 
-
         }
     }
 
+    public String shorterWord(String s,int n){
 
+        int length = s.length();
+        if(length>n){
+            s = s.substring(0,n);
+            s = s+"...";
+            return s;
+        }
+        return s;
+    }
 
 }
 

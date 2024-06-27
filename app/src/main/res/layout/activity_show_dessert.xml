@@ -70,9 +70,9 @@
 
                     <ImageView
                         android:id="@+id/imageView14_show_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/cupcake" />
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        app:srcCompat="@drawable/chocolategg" />
 
                     <ImageView
                         android:id="@+id/imageView15_show_favorate"

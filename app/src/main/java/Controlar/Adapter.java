@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.nouroeddinne.sweetsstore.Favourite_Dessert_Activity;
-import com.nouroeddinne.sweetsstore.HomeActivity;
 import com.nouroeddinne.sweetsstore.R;
 import com.nouroeddinne.sweetsstore.ShowDessertActivity;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
@@ -48,8 +39,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
     @Override
     public void onBindViewHolder(@NonNull Adapter.ViweHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        Model model = dessertList.get(position);
-        holder.textName.setText(model.getName());
+        int currentPosition =holder.getAdapterPosition();
+        Model model = dessertList.get(currentPosition);
+        holder.textName.setText(shorterWord(model.getName(),30));
         holder.textPrice.setText(model.getPrice());
         Glide.with(context).load(model.getImg()).into(holder.imgDessert);
 
@@ -91,12 +83,12 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
                 }
 
                 db.updateDessert(model);
-                dessertList.set(position, model);
-                notifyItemChanged(position);
+                dessertList.set(currentPosition, model);
+                notifyDataSetChanged();
+
 
             }
         });
-
 
         holder.imgCart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,8 +98,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
                 model.setCart(newCartStatus);
 
                 db.updateDessert(model);
-                dessertList.set(position, model);
-                notifyItemChanged(position);
+                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
+                dessertList.set(currentPosition, model);
+                notifyDataSetChanged();
 
             }
         });
@@ -120,7 +113,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
     }
 
     public class ViweHolder extends RecyclerView.ViewHolder{
-
         TextView textName,textPrice;
         ImageView imgDessert,imgFavorate,imgCart;
         public ViweHolder(@NonNull View itemView) {
@@ -137,7 +129,51 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
 
 
 
+//creat methoed short text more then 45 char
+
+
+    public String shorterWord(String s,int n){
+
+        int length = s.length();
+        if(length>n){
+            s = s.substring(0,n);
+            s = s+"...";
+            return s;
+        }
+        return s;
+    }
 
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,16 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.View;
-
 import androidx.annotation.NonNull;
-
 import com.bumptech.glide.Glide;
-import com.nouroeddinne.sweetsstore.Favourite_Dessert_Activity;
 import com.nouroeddinne.sweetsstore.R;
 import com.nouroeddinne.sweetsstore.ShowDessertActivity;
-
 import java.util.ArrayList;
-
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
@@ -24,20 +19,17 @@ public class AdapterFavorate extends Adapter{
         super(context, dessertList);
     }
 
-
     public void onBindViewHolder(@NonNull Adapter.ViweHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        Model model = dessertList.get(position);
-        holder.textName.setText(model.getName());
+        int currentPosition =holder.getAdapterPosition();
+        Model model = dessertList.get(currentPosition);
+        holder.textName.setText(shorterWord(model.getName(),30));
         holder.textPrice.setText(model.getPrice());
         Glide.with(context).load(model.getImg()).into(holder.imgDessert);
         holder.imgFavorate.setImageResource(R.drawable.favorite_full);
 
-
         if (model.getCart()){
-            holder.imgCart.setImageResource(R.drawable.aded_to_cart);
-        }else {
-            holder.imgCart.setImageResource(R.drawable.add_to_cart);
+            holder.imgCart.setVisibility(View.GONE);
         }
 
         db=new Database(context);
@@ -58,15 +50,13 @@ public class AdapterFavorate extends Adapter{
             @Override
             public void onClick(View v) {
 
+                int currentPosition =holder.getAdapterPosition();
                 boolean newFavoriteStatus = !model.getFavorite();
                 model.setFavorite(newFavoriteStatus);
 
                 db.updateDessert(model);
-                dessertList.remove(position);
-                notifyItemRemoved(position);
-
-                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",model.getPrice()));
-
+                dessertList.remove(currentPosition);
+                notifyItemRemoved(currentPosition);
 
             }
         });
@@ -76,6 +66,7 @@ public class AdapterFavorate extends Adapter{
             @Override
             public void onClick(View v) {
 
+                int currentPosition =holder.getAdapterPosition();
                 boolean newCartStatus = !model.getCart();
                 model.setCart(newCartStatus);
 
@@ -84,12 +75,24 @@ public class AdapterFavorate extends Adapter{
                 }
 
                 db.updateDessert(model);
-                dessertList.set(position, model);
-                notifyItemChanged(position);
+                dessertList.set(currentPosition, model);
+                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
+                notifyItemChanged(currentPosition);
 
             }
         });
 
+    }
+
+    public String shorterWord(String s,int n){
+
+        int length = s.length();
+        if(length>n){
+            s = s.substring(0,n);
+            s = s+"...";
+            return s;
+        }
+        return s;
     }
 
 }
