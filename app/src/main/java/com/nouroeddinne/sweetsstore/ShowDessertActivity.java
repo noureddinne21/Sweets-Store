@@ -18,6 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -123,7 +125,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                     } else {
                         imgFavorate.setImageResource(R.drawable.favorite_empty);
                     }
-
                 }
             });
 

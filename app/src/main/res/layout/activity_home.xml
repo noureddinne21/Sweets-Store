@@ -63,6 +63,16 @@
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/cupcake" />
 
+            <TextView
+                android:id="@+id/textView21_capcake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="capcake"
+                android:textColor="@color/DarkPurpol"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/linear_capcake_white"
                 android:layout_width="match_parent"
@@ -88,6 +98,16 @@
                 android:background="@drawable/null_background"
                 app:srcCompat="@drawable/donut" />
 
+            <TextView
+                android:id="@+id/textView22_dounet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="dounet"
+                android:textColor="@color/DarkPurpol"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:id="@+id/linear_dounet_white"
                 android:layout_width="match_parent"
@@ -110,6 +130,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/cookies" />
+
+            <TextView
+                android:id="@+id/textView31_cookies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="cookies"
+                android:textColor="@color/DarkPurpol"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/linear_cookies_white"
@@ -134,6 +164,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/candy" />
+
+            <TextView
+                android:id="@+id/textView32_candy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="candy"
+                android:textColor="@color/DarkPurpol"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/linear_candy_white"

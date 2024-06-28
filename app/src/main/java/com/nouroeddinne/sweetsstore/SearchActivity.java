@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
@@ -27,7 +29,7 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
     private OnBackPressedCallback callback;
     RecyclerView recyclerView;
     EditText editText;
-    ImageView home,cart,profail,favourite,back;
+    ImageView back;
     LinearLayout linear_results,linear_no_results;
     static RecyclerView.Adapter adapter;
     static ArrayList<Model> dessertList;
@@ -49,10 +51,7 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         linear_results = findViewById(R.id.linear_results);
         linear_no_results = findViewById(R.id.linear_no_results);
 
-        home = findViewById(R.id.imageView_home);
-        cart = findViewById(R.id.imageView_cart);
-        profail = findViewById(R.id.imageView_profaile);
-        favourite = findViewById(R.id.imageView_favourite);
+
         back = findViewById(R.id.imageView17);
 
 
@@ -94,7 +93,7 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
                     linear_no_results.setVisibility(View.VISIBLE);
                 }
 
-                adapter = new Adapter(context,dessertList);
+                adapter = new Adapter(context, dessertList);
                 recyclerView.setAdapter(adapter);
 
             }
@@ -103,45 +102,6 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
             public void afterTextChanged(Editable s) {}
         });
 
-
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
-        cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, CartActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
-        favourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, Favourite_Dessert_Activity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
-        profail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SearchActivity.this, ProfileActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
 
     }
 

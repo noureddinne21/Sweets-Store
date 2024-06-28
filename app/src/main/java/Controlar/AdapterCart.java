@@ -45,7 +45,7 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
         ModelCart modelCart = dessertListCart.get(currentPosition);
         Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
 
-        holder.textName.setText(shorterWord(model.getName(),30));
+        holder.textName.setText(shorterWord(model.getName(),25));
         Glide.with(context).load(model.getImg()).into(holder.imgDessert);
 
         holder.textPrice.setText(modelCart.getPrice());
@@ -57,7 +57,6 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 Intent intent = new Intent(context, ShowDessertActivity.class);
                 intent.putExtra("position",model.getId());
                 context.startActivity(intent);
-                ((Activity) context).finish();
             }
         });
 

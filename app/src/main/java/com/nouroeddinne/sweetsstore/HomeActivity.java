@@ -3,6 +3,7 @@ package com.nouroeddinne.sweetsstore;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.icu.text.Normalizer2;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ import Model.ModelCart;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
     ImageView favourite,cart,search,profail;
-    TextView textViewNotifFaverate,textViewNotifCart;
+    TextView textViewNotifFaverate,textViewNotifCart,textCapcake,textDounet,textCookies,textCandy;
     LinearLayout linearCapcake,linearCapcakewhite,linearDounet,linearDounetwhite,linearCookies,linearCookieswhite,linearCandy,linearCandywhite;
     RecyclerView recyclerView;
     static RecyclerView.Adapter adapter;
@@ -67,6 +69,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         linearDounetwhite.setBackgroundResource(R.drawable.null_background);
         linearCandywhite.setBackgroundResource(R.drawable.null_background);
 
+        textCapcake = findViewById(R.id.textView21_capcake);
+        textDounet = findViewById(R.id.textView22_dounet);
+        textCookies = findViewById(R.id.textView31_cookies);
+        textCandy = findViewById(R.id.textView32_candy);
+
         db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
@@ -80,15 +87,21 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         textNotif();
 
         dessertList=db.getAllDESSERT();
-        adapter = new Adapter(this,dessertList);
+        adapter = new Adapter(this, dessertList);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
                 super.onChanged();
                 textNotif();
             }
+            @Override
+            public void onItemRangeChanged(int positionStart, int itemCount) {
+                super.onItemRangeChanged(positionStart, itemCount);
+                textNotif();
+            }
         });
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         linearCapcake.setOnClickListener(this);
         linearDounet.setOnClickListener(this);
@@ -100,23 +113,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         search.setOnClickListener(this);
         profail.setOnClickListener(this);
 
-        Log.d("TAG", "dessert List : "+dessertList.size());
-        for (Model m: dessertList){
-            Log.d("TAG", "dessert List : "+m.getId()+" getName "+m.getName()+" getPrice "+m.getPrice()+" getType "+m.getType()+" getFavorite "+m.getFavorite()+" getCart "+m.getCart());
+//        Log.d("TAG", "dessert List : "+dessertList.size());
+//        for (Model m: dessertList){
+//            Log.d("TAG", "dessert List : "+m.getId()+" getName "+m.getName()+" getPrice "+m.getPrice()+" getType "+m.getType()+" getFavorite "+m.getFavorite()+" getCart "+m.getCart());
+//        }
+//
+//        ArrayList<ModelCart> lc = db.getAllDESSERTCart();
+//        Log.d("TAG", "dessert List Cart : "+lc.size());
+//
+//        for (ModelCart m: lc){
+//            Log.d("TAG", "dessert List Cart : "+m.getId()+" getIdd "+m.getIdd()+" getPrice "+m.getPrice()+" getCount "+m.getCount()+" getTotalPrice "+m.getTotalPrice());
+//        }
+
+
         }
 
-        ArrayList<ModelCart> lc = db.getAllDESSERTCart();
-        Log.d("TAG", "dessert List Cart : "+lc.size());
-
-        for (ModelCart m: lc){
-            Log.d("TAG", "dessert List Cart : "+m.getId()+" getIdd "+m.getIdd()+" getPrice "+m.getPrice()+" getCount "+m.getCount()+" getTotalPrice "+m.getTotalPrice());
-        }
 
 
-        }
-
-
-
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View v) {
 
@@ -136,7 +150,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
                 type = "capcake";
                 dessertList=db.getByTypeDESSERT(type);
-                adapter = new Adapter(HomeActivity.this,dessertList);
+                adapter = new Adapter(HomeActivity.this, dessertList);
                 adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
@@ -156,12 +170,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 linearDounetwhite.setBackgroundResource(R.drawable.null_background);
                 linearCandywhite.setBackgroundResource(R.drawable.null_background);
 
+                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.white));
+                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+
+
         }else if (v.getId() == R.id.linear_dounet) {
 
                 type = "dounet";
                 dessertList=db.getByTypeDESSERT(type);
-                adapter = new Adapter(HomeActivity.this,dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            adapter = new Adapter(HomeActivity.this, dessertList);
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -180,12 +200,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 linearDounetwhite.setBackgroundResource(R.color.white);
                 linearCandywhite.setBackgroundResource(R.drawable.null_background);
 
+                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textDounet.setTextColor(ContextCompat.getColor(this, R.color.white));
+                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+
+
         }else if (v.getId() == R.id.linear_cookies) {
 
                 type = "cookies";
                 dessertList=db.getByTypeDESSERT(type);
-                adapter = new Adapter(HomeActivity.this,dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            adapter = new Adapter(HomeActivity.this, dessertList);
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -204,12 +230,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 linearDounetwhite.setBackgroundResource(R.drawable.null_background);
                 linearCandywhite.setBackgroundResource(R.drawable.null_background);
 
+                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textCookies.setTextColor(ContextCompat.getColor(this, R.color.white));
+                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+
         }else if (v.getId() == R.id.linear_candy) {
 
                 type = "candy";
                 dessertList=db.getByTypeDESSERT(type);
-                adapter = new Adapter(HomeActivity.this,dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            adapter = new Adapter(HomeActivity.this, dessertList);
+            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -227,6 +258,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 linearCookieswhite.setBackgroundResource(R.drawable.null_background);
                 linearDounetwhite.setBackgroundResource(R.drawable.null_background);
                 linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
+
+            textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+            textCandy.setTextColor(ContextCompat.getColor(this, R.color.white));
+            textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+            textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
 
         }
 
@@ -316,9 +352,9 @@ public void textNotif(){
     dessertListFavorate=db.getFavorateDESSERT();
     dessertListCart=db.getCartDESSERT();
 
-    for (Model m:dessertListCart){
-        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
-    }
+//    for (Model m:dessertListCart){
+//        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
+//    }
     if (dessertListFavorate.size()>0){
         textViewNotifFaverate.setVisibility(View.VISIBLE);
         textViewNotifFaverate.setText(String.valueOf(dessertListFavorate.size()));

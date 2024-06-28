@@ -3,12 +3,23 @@
     <style name="Base.Theme.SweetsStore" parent="Theme.AppCompat.Light.NoActionBar">
 
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/lithPink2</item>
+        <item name="colorPrimaryDark">@color/lithPink2</item>
+        <item name="colorAccent">@color/lithPink2</item>
+        <item name="android:windowBackground">@color/lithPink2</item>
+        <item name="android:navigationBarColor">@color/lithPink2</item>
+
     </style>
 
     <style name="mytheam">
 
         <item name="colorPrimaryDark">@color/Pink</item>
+
+        <item name="colorPrimary">@color/Pink</item>
+        <item name="colorAccent">@color/Pink</item>
+        <item name="android:textColorPrimary">@color/Pink</item>
+        <item name="android:textColorSecondary">@color/Pink</item>
+
 
     </style>
 

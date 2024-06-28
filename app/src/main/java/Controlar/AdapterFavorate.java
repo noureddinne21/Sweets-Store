@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.view.View;
 import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
+import com.nouroeddinne.sweetsstore.OnClickListener;
 import com.nouroeddinne.sweetsstore.R;
 import com.nouroeddinne.sweetsstore.ShowDessertActivity;
 import java.util.ArrayList;
@@ -28,9 +29,11 @@ public class AdapterFavorate extends Adapter{
         Glide.with(context).load(model.getImg()).into(holder.imgDessert);
         holder.imgFavorate.setImageResource(R.drawable.favorite_full);
 
-        if (model.getCart()){
-            holder.imgCart.setVisibility(View.GONE);
-        }
+        holder.imgCart.setVisibility(View.GONE);
+
+//        if (model.getCart()){
+//            holder.imgCart.setVisibility(View.GONE);
+//        }
 
         db=new Database(context);
 
@@ -40,7 +43,6 @@ public class AdapterFavorate extends Adapter{
                 Intent intent = new Intent(context, ShowDessertActivity.class);
                 intent.putExtra("position",model.getId());
                 context.startActivity(intent);
-                ((Activity) context).finish();
 
             }
         });
@@ -61,26 +63,26 @@ public class AdapterFavorate extends Adapter{
             }
         });
 
-
-        holder.imgCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int currentPosition =holder.getAdapterPosition();
-                boolean newCartStatus = !model.getCart();
-                model.setCart(newCartStatus);
-
-                if (newCartStatus) {
-                    holder.imgCart.setVisibility(View.GONE);
-                }
-
-                db.updateDessert(model);
-                dessertList.set(currentPosition, model);
-                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
-                notifyItemChanged(currentPosition);
-
-            }
-        });
+//
+//        holder.imgCart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                int currentPosition =holder.getAdapterPosition();
+//                boolean newCartStatus = !model.getCart();
+//                model.setCart(newCartStatus);
+//
+//                if (newCartStatus) {
+//                    holder.imgCart.setVisibility(View.GONE);
+//                }
+//
+//                db.updateDessert(model);
+//                dessertList.set(currentPosition, model);
+//                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
+//                notifyItemChanged(currentPosition);
+//
+//            }
+//        });
 
     }
 
