@@ -3,7 +3,7 @@ package Utel;
 public class UtelsDB {
 
     public static final String NAME_DATABASE="DBD";
-    public static final int VERSTION_DATABASE=47;
+    public static final int VERSTION_DATABASE=49;
     public static final String DESSERT_TABLE="TD";
     public static final String KEY_ID="id";
     public static final String KEY_NAME="name";

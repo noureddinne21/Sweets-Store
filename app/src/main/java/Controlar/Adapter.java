@@ -29,12 +29,15 @@ import java.util.ArrayList;
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
+import Database.DataBaseAccess;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
 
     Context context;
     ArrayList<Model> dessertList;
-    Database db ;
+//    Database db ;
+    private DataBaseAccess db ;
+
     public Adapter(Context context, ArrayList<Model> dessertList) {
         this.context = context;
         this.dessertList = dessertList;
@@ -62,15 +65,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
             holder.imgFavorate.setImageResource(R.drawable.favorite_empty);
         }
 
-        holder.imgCart.setVisibility(View.GONE);
+//        holder.imgCart.setVisibility(View.GONE);
 
-//        if (model.getCart()){
-//            holder.imgCart.setVisibility(View.GONE);
-//        }
+        if (model.getCart()){
+            holder.imgCart.setVisibility(View.GONE);
+        }
 
-        db=new Database(context);
+//        db=new Database(context);
 
-
+        db = DataBaseAccess.getInstance(context);
 
 
 
@@ -96,7 +99,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
 
                 boolean newFavoriteStatus = !model.getFavorite();
                 model.setFavorite(newFavoriteStatus);
+                db.open();
                 db.updateDessert(model);
+                db.close();
                 dessertList.set(currentPosition, model);
                 notifyDataSetChanged();
 //                notifyItemChanged(position);
@@ -104,25 +109,29 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
 
             }
         });
-//
-//        holder.imgCart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //int currentPositionimgCart =holder.getAdapterPosition();
-//
-//                boolean newCartStatus = !model.getCart();
-//                model.setCart(newCartStatus);
-//                db.updateDessert(model);
-//
-//                //dessertList.set(currentPositionimgCart, model);
-////                notifyItemChanged(position);
-//                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
-////                notifyDataSetChanged();
+
+        holder.imgCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                holder.imgCart.setVisibility(View.GONE);
+
+                //int currentPositionimgCart =holder.getAdapterPosition();
+                boolean newCartStatus = !model.getCart();
+                model.setCart(newCartStatus);
+                db.open();
+                db.updateDessert(model);
+
+                //dessertList.set(currentPositionimgCart, model);
+//                notifyItemChanged(position);
+                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
+                db.close();
+                notifyDataSetChanged();
 //                notifyItemChanged(currentPosition);
-//                //holder.imgCart.setVisibility(View.GONE);
-//
-//            }
-//        });
+                //holder.imgCart.setVisibility(View.GONE);
+
+            }
+        });
 
 
 

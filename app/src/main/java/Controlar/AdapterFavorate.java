@@ -14,8 +14,11 @@ import java.util.ArrayList;
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
+import Database.DataBaseAccess;
 
 public class AdapterFavorate extends Adapter{
+    private DataBaseAccess db ;
+
     public AdapterFavorate(Context context, ArrayList<Model> dessertList) {
         super(context, dessertList);
     }
@@ -31,11 +34,12 @@ public class AdapterFavorate extends Adapter{
 
         holder.imgCart.setVisibility(View.GONE);
 
+        db = DataBaseAccess.getInstance(context);
 //        if (model.getCart()){
 //            holder.imgCart.setVisibility(View.GONE);
 //        }
 
-        db=new Database(context);
+//        db=new Database(context);
 
         holder.imgDessert.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,7 +60,10 @@ public class AdapterFavorate extends Adapter{
                 boolean newFavoriteStatus = !model.getFavorite();
                 model.setFavorite(newFavoriteStatus);
 
+                db.open();
                 db.updateDessert(model);
+                db.close();
+
                 dessertList.remove(currentPosition);
                 notifyItemRemoved(currentPosition);
 

@@ -18,12 +18,16 @@ import java.util.ArrayList;
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
+import Database.DataBaseAccess;
 
 public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     private Context context;
     private ArrayList<ModelCart> dessertListCart;
-    private Database db ;
+//    private Database db ;
+    DataBaseAccess db ;
+
+
     public AdapterCart(Context context, ArrayList<ModelCart> dessertListCart) {
         this.context = context;
         this.dessertListCart = dessertListCart;
@@ -38,13 +42,15 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull AdapterCart.ViweHolder holder, int position) {
+        db = DataBaseAccess.getInstance(context);
 
-        db = new Database(context);
+//        db = new Database(context);
         int currentPosition =holder.getAdapterPosition();
 
         ModelCart modelCart = dessertListCart.get(currentPosition);
+        db.open();
         Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
-
+        db.close();
         holder.textName.setText(shorterWord(model.getName(),25));
         Glide.with(context).load(model.getImg()).into(holder.imgDessert);
 
@@ -68,8 +74,10 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                 int currentPosition =holder.getAdapterPosition();
                 boolean newCartStatus = !model.getCart();
                 model.setCart(newCartStatus);
+                db.open();
                 db.updateDessert(model);
                 db.deleteDessertCart(modelCart);
+                db.close();
                 dessertListCart.remove(currentPosition);
                 notifyItemRemoved(currentPosition);
 
@@ -86,7 +94,9 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
                 modelCart.setCount(String.valueOf(count));
                 modelCart.setTotalPrice(String.valueOf(price));
+                db.open();
                 db.updateDessertCart(modelCart);
+                db.close();
                 notifyDataSetChanged();
 
                 holder.textCount.setText(String.valueOf(count));
@@ -105,7 +115,9 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
                     Double price = Double.valueOf(count*Double.valueOf(model.getPrice()));
                     modelCart.setCount(String.valueOf(count));
                     modelCart.setTotalPrice(String.valueOf(price));
+                    db.open();
                     db.updateDessertCart(modelCart);
+                    db.close();
                     notifyDataSetChanged();
 
                     holder.textCount.setText(String.valueOf(count));

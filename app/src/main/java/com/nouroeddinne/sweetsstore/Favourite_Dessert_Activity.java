@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import Controlar.AdapterFavorate;
 import Database.Database;
 import Model.Model;
+import Database.DataBaseAccess;
 
 public class Favourite_Dessert_Activity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -21,7 +22,8 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
     RecyclerView recyclerView;
     static AdapterFavorate adapter;
     static ArrayList<Model> dessertList;
-    Database db;
+//    Database db;
+    DataBaseAccess db = DataBaseAccess.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +34,14 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         back = findViewById(R.id.imageView17);
         recyclerView = findViewById(R.id.recyclerView);
 
-        db = new Database(this);
+//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
+        db.open();
         dessertList=db.getFavorateDESSERT();
+        db.close();
 
         adapter = new AdapterFavorate(this, dessertList);
         recyclerView.setAdapter(adapter);

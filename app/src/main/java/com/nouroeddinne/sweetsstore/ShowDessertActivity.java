@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import Database.Database;
 import Model.Model;
 import Model.ModelCart;
+import Database.DataBaseAccess;
 
 public class ShowDessertActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -33,11 +34,11 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     TextView textName,textPrice,textDescription,textIngredients,textTotal;
     Button button1,button3,button5,button10,buttonAddToCart;
     EditText editTextCustom;
-    Database db;
+//    Database db;
     private int itemCount = 0 ;
     Double total = 0.0;
     Model model;
-    ModelCart modelCart;
+    DataBaseAccess db = DataBaseAccess.getInstance(this);
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -71,7 +72,7 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         button5.setBackgroundResource(R.drawable.backgroun_item_cart);
         button10.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-        db = new Database(this);
+//        db = new Database(this);
         DecimalFormat df = new DecimalFormat("#.##");
 
         callback = new OnBackPressedCallback(true) {
@@ -94,6 +95,8 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
 
+            db.open();
+
             int p = extras.getInt("position");
             Glide.with(this).load(db.getDessertById(p).getImg()).into(imgDessert);
             if (db.getDessertById(p).getFavorite()){
@@ -113,13 +116,18 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                     db.getDessertById(p).getFavorite(),
                     db.getDessertById(p).getCart());
 
+            db.close();
+
             imgFavorate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    db.open();
+
                     boolean newFavoriteStatus = !db.getDessertById(p).getFavorite();
                     model.setFavorite(newFavoriteStatus);
                     db.updateDessert(model);
+                    db.close();
                     if (newFavoriteStatus) {
                         imgFavorate.setImageResource(R.drawable.favorite_full);
                     } else {
@@ -132,13 +140,14 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 @Override
                 public void onClick(View v) {
 
+                    db.open();
                     boolean newCartStatus = !db.getDessertById(p).getCart();
 
                     if (newCartStatus) {
                         model.setCart(newCartStatus);
                         db.updateDessert(model);
                         db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(model.getPrice()),String.valueOf(total)));
-
+                        db.close();
                         Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
                         startActivity(intent);
                         finish();

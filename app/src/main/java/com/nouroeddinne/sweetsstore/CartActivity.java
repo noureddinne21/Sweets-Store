@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import Controlar.AdapterCart;
 import Database.Database;
 import Model.ModelCart;
+import Database.DataBaseAccess;
 
 public class CartActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -33,7 +34,9 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
     private TextView totalPrice;
     static RecyclerView.Adapter adapter;
     static ArrayList<ModelCart> dessertListCart;
-    Database db;
+//    Database db;
+    DataBaseAccess db = DataBaseAccess.getInstance(this);
+
     private static Double total=0.0;
 
     @Override
@@ -53,7 +56,7 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
         back = findViewById(R.id.imageView17);
         totalPrice = findViewById(R.id.textView14);
 
-        db = new Database(this);
+//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));;
@@ -75,9 +78,11 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
                 finish();            }
         });
 
+        db.open();
         dessertListCart=db.getAllDESSERTCart();
-        adapter = new AdapterCart(this,dessertListCart);
+        db.close();
 
+        adapter = new AdapterCart(this,dessertListCart);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -96,10 +101,10 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
 
         getTotal();
 
-//        for (ModelCart model : dessertListCart){
-//            total+=Double.valueOf(model.getPrice());
-//            Log.d("TAG", "Cart Activty: id "+model.getId()+" idd "+model.getIdd()+" price "+model.getPrice()+" count "+model.getCount()+" index "+String.valueOf(dessertListCart.indexOf(model)));
-//        }
+        for (ModelCart model : dessertListCart){
+            total+=Double.valueOf(model.getPrice());
+            Log.d("TAG", "Cart Activty: id "+model.getId()+" idd "+model.getIdd()+" price "+model.getPrice()+" count "+model.getCount()+" index "+String.valueOf(dessertListCart.indexOf(model)));
+        }
 //        totalPrice.setText(String.valueOf(total));
 
         button.setOnClickListener(new View.OnClickListener() {

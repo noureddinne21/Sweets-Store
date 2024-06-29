@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import Controlar.Adapter;
 import Database.Database;
+import Database.DataBaseAccess;
 import Model.Model;
 import Model.ModelCart;
 
@@ -31,8 +32,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     static RecyclerView.Adapter adapter;
     static ArrayList<Model> dessertList,dessertListFavorate,dessertListCart;
-     Database db;
-     String type ="";
+    //Database db;
+    DataBaseAccess db = DataBaseAccess.getInstance(this);
+    String type ="";
 
 
     @SuppressLint("MissingInflatedId")
@@ -74,19 +76,18 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         textCookies = findViewById(R.id.textView31_cookies);
         textCandy = findViewById(R.id.textView32_candy);
 
-        db = new Database(this);
+        //db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        int show =0;
-        if (show ==0){
-            addItems();
-            show++;
-        }
+        addItems();
         textNotif();
 
+        db.open();
         dessertList=db.getAllDESSERT();
+        db.close();
+
         adapter = new Adapter(this, dessertList);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -149,7 +150,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         } else if (v.getId() == R.id.linear_capcake) {
 
                 type = "capcake";
+                db.open();
                 dessertList=db.getByTypeDESSERT(type);
+                db.close();
                 adapter = new Adapter(HomeActivity.this, dessertList);
                 adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
@@ -179,7 +182,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if (v.getId() == R.id.linear_dounet) {
 
                 type = "dounet";
+                db.open();
                 dessertList=db.getByTypeDESSERT(type);
+                db.close();
             adapter = new Adapter(HomeActivity.this, dessertList);
             adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
@@ -209,9 +214,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if (v.getId() == R.id.linear_cookies) {
 
                 type = "cookies";
+                db.open();
                 dessertList=db.getByTypeDESSERT(type);
-            adapter = new Adapter(HomeActivity.this, dessertList);
-            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                db.close();
+                adapter = new Adapter(HomeActivity.this, dessertList);
+                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -238,9 +245,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if (v.getId() == R.id.linear_candy) {
 
                 type = "candy";
+                db.open();
                 dessertList=db.getByTypeDESSERT(type);
-            adapter = new Adapter(HomeActivity.this, dessertList);
-            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                db.close();
+                adapter = new Adapter(HomeActivity.this, dessertList);
+                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
                     @Override
                     public void onChanged() {
                         super.onChanged();
@@ -297,6 +306,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public void addItems(){
 
+        db.open();
+
         db.addDessert(new Model("fresh squeezed mimosa","5.99","capcake","https://sallysbakingaddiction.com/wp-content/uploads/2016/08/fresh-squeezed-mimosa-cupcakes-2-300x450.jpg",false,false));
         db.addDessert(new Model("blueberry lemon cupcakes","3.99","capcake","https://sallysbakingaddiction.com/wp-content/uploads/2016/04/blueberry-lemon-cupcakes-300x300.jpg",false,false));
         db.addDessert(new Model("homemade strawberry cupcakes","1.99","capcake","https://sallysbakingaddiction.com/wp-content/uploads/2018/08/homemade-strawberry-cupcakes-300x300.jpg",false,false));
@@ -342,19 +353,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         db.addDessert(new Model("chocolate covered peanut butter balls","4.99","candy","https://sallysbakingaddiction.com/wp-content/uploads/2023/12/chocolate-covered-peanut-butter-balls-300x450.jpg",false,false));
         db.addDessert(new Model("chocolate cake pops recipe","2.99","candy","https://sallysbakingaddiction.com/wp-content/uploads/2018/02/chocolate-cake-pops-recipe-300x450.jpg",false,false));
 
-
+        db.close();
 
     }
 
 
 public void textNotif(){
 
-    dessertListFavorate=db.getFavorateDESSERT();
-    dessertListCart=db.getCartDESSERT();
+        db.open();
+        dessertListFavorate=db.getFavorateDESSERT();
+        dessertListCart=db.getCartDESSERT();
+        db.close();
 
-//    for (Model m:dessertListCart){
-//        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
-//    }
+    for (Model m:dessertListCart){
+        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
+    }
+
     if (dessertListFavorate.size()>0){
         textViewNotifFaverate.setVisibility(View.VISIBLE);
         textViewNotifFaverate.setText(String.valueOf(dessertListFavorate.size()));

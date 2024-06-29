@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import Controlar.Adapter;
 import Database.Database;
 import Model.Model;
+import Database.DataBaseAccess;
 
 public class SearchActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -33,8 +34,9 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
     LinearLayout linear_results,linear_no_results;
     static RecyclerView.Adapter adapter;
     static ArrayList<Model> dessertList;
-    Database db;
-    Context context= this;
+//    Database db;
+    DataBaseAccess db = DataBaseAccess.getInstance(this);
+    Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +57,7 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         back = findViewById(R.id.imageView17);
 
 
-        db = new Database(this);
+//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -84,7 +86,10 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
+                db.open();
                 dessertList=db.searchDESSERT(String.valueOf(s));
+                db.close();
+
                 if(dessertList.size()>0){
                     linear_results.setVisibility(View.VISIBLE);
                     linear_no_results.setVisibility(View.GONE);

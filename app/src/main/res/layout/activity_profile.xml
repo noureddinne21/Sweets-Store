@@ -425,7 +425,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="V 1.0.1"
+                android:text="Development By noureddine laghrib V 1.0.1"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
