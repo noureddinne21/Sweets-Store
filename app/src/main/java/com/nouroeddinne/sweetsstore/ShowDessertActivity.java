@@ -34,7 +34,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     TextView textName,textPrice,textDescription,textIngredients,textTotal;
     Button button1,button3,button5,button10,buttonAddToCart;
     EditText editTextCustom;
-//    Database db;
     private int itemCount = 0 ;
     Double total = 0.0;
     Model model;
@@ -72,7 +71,6 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
         button5.setBackgroundResource(R.drawable.backgroun_item_cart);
         button10.setBackgroundResource(R.drawable.backgroun_item_cart);
 
-//        db = new Database(this);
         DecimalFormat df = new DecimalFormat("#.##");
 
         callback = new OnBackPressedCallback(true) {

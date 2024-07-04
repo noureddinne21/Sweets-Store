@@ -34,7 +34,6 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
     private TextView totalPrice;
     static RecyclerView.Adapter adapter;
     static ArrayList<ModelCart> dessertListCart;
-//    Database db;
     DataBaseAccess db = DataBaseAccess.getInstance(this);
 
     private static Double total=0.0;
@@ -56,7 +55,6 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
         back = findViewById(R.id.imageView17);
         totalPrice = findViewById(R.id.textView14);
 
-//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));;
@@ -105,7 +103,6 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
             total+=Double.valueOf(model.getPrice());
             Log.d("TAG", "Cart Activty: id "+model.getId()+" idd "+model.getIdd()+" price "+model.getPrice()+" count "+model.getCount()+" index "+String.valueOf(dessertListCart.indexOf(model)));
         }
-//        totalPrice.setText(String.valueOf(total));
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override

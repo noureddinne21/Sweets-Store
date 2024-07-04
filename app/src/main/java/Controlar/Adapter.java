@@ -20,7 +20,6 @@ import com.bumptech.glide.Glide;
 import com.nouroeddinne.sweetsstore.CartActivity;
 import com.nouroeddinne.sweetsstore.Favourite_Dessert_Activity;
 import com.nouroeddinne.sweetsstore.HomeActivity;
-import com.nouroeddinne.sweetsstore.OnClickListener;
 import com.nouroeddinne.sweetsstore.ProfileActivity;
 import com.nouroeddinne.sweetsstore.R;
 import com.nouroeddinne.sweetsstore.SearchActivity;
@@ -35,7 +34,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
 
     Context context;
     ArrayList<Model> dessertList;
-//    Database db ;
     private DataBaseAccess db ;
 
     public Adapter(Context context, ArrayList<Model> dessertList) {
@@ -65,13 +63,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
             holder.imgFavorate.setImageResource(R.drawable.favorite_empty);
         }
 
-//        holder.imgCart.setVisibility(View.GONE);
-
         if (model.getCart()){
             holder.imgCart.setVisibility(View.GONE);
+        }else {
+            holder.imgCart.setVisibility(View.VISIBLE);
         }
-
-//        db=new Database(context);
 
         db = DataBaseAccess.getInstance(context);
 
@@ -91,21 +87,20 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
             @Override
             public void onClick(View v) {
 
+                boolean newFavoriteStatus = !model.getFavorite();
+
                 if (model.getFavorite()){
                     holder.imgFavorate.setImageResource(R.drawable.favorite_full);
                 }else {
                     holder.imgFavorate.setImageResource(R.drawable.favorite_empty);
                 }
 
-                boolean newFavoriteStatus = !model.getFavorite();
                 model.setFavorite(newFavoriteStatus);
                 db.open();
                 db.updateDessert(model);
                 db.close();
                 dessertList.set(currentPosition, model);
                 notifyDataSetChanged();
-//                notifyItemChanged(position);
-
 
             }
         });
@@ -114,47 +109,24 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
             @Override
             public void onClick(View v) {
 
-                holder.imgCart.setVisibility(View.GONE);
-
-                //int currentPositionimgCart =holder.getAdapterPosition();
                 boolean newCartStatus = !model.getCart();
+
+                if (model.getCart()){
+                    holder.imgCart.setVisibility(View.GONE);
+                }else {
+                    holder.imgCart.setVisibility(View.VISIBLE);
+                }
+
                 model.setCart(newCartStatus);
                 db.open();
                 db.updateDessert(model);
-
-                //dessertList.set(currentPositionimgCart, model);
-//                notifyItemChanged(position);
                 db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
                 db.close();
                 notifyDataSetChanged();
-//                notifyItemChanged(currentPosition);
-                //holder.imgCart.setVisibility(View.GONE);
+
 
             }
         });
-
-
-
-//        holder.imgCart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                if (!model.getCart()) {
-//                    holder.imgCart.setVisibility(View.GONE);
-//                }
-//
-//                boolean newCartStatus = !model.getCart();
-//                model.setCart(newCartStatus);
-//                db.updateDessert(model);
-//                dessertList.set(currentPosition, model);
-//                db.addDessertCart(new ModelCart(String.valueOf(model.getId()),"1",String.valueOf(model.getPrice()),String.valueOf(model.getPrice())));
-//                notifyDataSetChanged();
-//
-//
-//
-//            }
-//        });
-
 
 
 
@@ -180,9 +152,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViweHolder> {
         }
     }
 
-
-
-//creat methoed short text more then 45 char
 
 
     public String shorterWord(String s,int n){

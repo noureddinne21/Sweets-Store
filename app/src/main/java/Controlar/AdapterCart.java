@@ -24,7 +24,6 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
     private Context context;
     private ArrayList<ModelCart> dessertListCart;
-//    private Database db ;
     DataBaseAccess db ;
 
 
@@ -44,7 +43,6 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
     public void onBindViewHolder(@NonNull AdapterCart.ViweHolder holder, int position) {
         db = DataBaseAccess.getInstance(context);
 
-//        db = new Database(context);
         int currentPosition =holder.getAdapterPosition();
 
         ModelCart modelCart = dessertListCart.get(currentPosition);

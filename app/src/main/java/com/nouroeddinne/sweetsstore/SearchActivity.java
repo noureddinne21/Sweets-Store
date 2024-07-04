@@ -34,7 +34,6 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
     LinearLayout linear_results,linear_no_results;
     static RecyclerView.Adapter adapter;
     static ArrayList<Model> dessertList;
-//    Database db;
     DataBaseAccess db = DataBaseAccess.getInstance(this);
     Context context = this;
     @Override
@@ -57,7 +56,6 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         back = findViewById(R.id.imageView17);
 
 
-//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

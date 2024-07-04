@@ -22,7 +22,6 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
     RecyclerView recyclerView;
     static AdapterFavorate adapter;
     static ArrayList<Model> dessertList;
-//    Database db;
     DataBaseAccess db = DataBaseAccess.getInstance(this);
 
     @Override
@@ -34,7 +33,6 @@ public class Favourite_Dessert_Activity extends AppCompatActivity implements OnB
         back = findViewById(R.id.imageView17);
         recyclerView = findViewById(R.id.recyclerView);
 
-//        db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

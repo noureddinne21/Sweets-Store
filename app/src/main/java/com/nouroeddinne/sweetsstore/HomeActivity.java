@@ -32,7 +32,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     RecyclerView recyclerView;
     static RecyclerView.Adapter adapter;
     static ArrayList<Model> dessertList,dessertListFavorate,dessertListCart;
-    //Database db;
     DataBaseAccess db = DataBaseAccess.getInstance(this);
     String type ="";
 
@@ -76,7 +75,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         textCookies = findViewById(R.id.textView31_cookies);
         textCandy = findViewById(R.id.textView32_candy);
 
-        //db = new Database(this);
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
