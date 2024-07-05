@@ -1,6 +1,7 @@
 package com.nouroeddinne.sweetsstore;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,25 +17,43 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import Controlar.Adapter;
 import Database.Database;
 import Database.DataBaseAccess;
 import Model.Model;
 import Model.ModelCart;
+import Model.ModelPager;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
     ImageView favourite,cart,search,profail;
-    TextView textViewNotifFaverate,textViewNotifCart,textCapcake,textDounet,textCookies,textCandy;
+    static TextView textViewNotifFaverate;
+    static TextView textViewNotifCart;
+    TextView textCapcake;
+    TextView textDounet;
+    TextView textCookies;
+    TextView textCandy;
     LinearLayout linearCapcake,linearCapcakewhite,linearDounet,linearDounetwhite,linearCookies,linearCookieswhite,linearCandy,linearCandywhite;
     RecyclerView recyclerView;
-    static RecyclerView.Adapter adapter;
-    static ArrayList<Model> dessertList,dessertListFavorate,dessertListCart;
-    DataBaseAccess db = DataBaseAccess.getInstance(this);
+    RecyclerView.Adapter adapter;
+    ArrayList<Model> dessertList,CapcakeList,Dounetlist,CookiesList,CandyList;
+    static ArrayList<Model> dessertListFavorate;
+    static ArrayList<Model> dessertListCart;
+    static DataBaseAccess db ;
     String type ="";
 
+    TabLayout tabLayout;
+    ViewPager2 viewPager;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -46,66 +65,148 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         cart = findViewById(R.id.imageView_cart);
         search = findViewById(R.id.imageView_search);
         profail = findViewById(R.id.imageView_profaile);
-        recyclerView = findViewById(R.id.recyclerView);
+//        recyclerView = findViewById(R.id.recyclerView);
+        tabLayout = findViewById(R.id.tabLayout);
+        viewPager = findViewById(R.id.viwepager);
 
         textViewNotifFaverate = findViewById(R.id.textView_notif_faverate);
         textViewNotifCart = findViewById(R.id.textView_notif_cart);
 
-        linearCapcake = findViewById(R.id.linear_capcake);
-        linearDounet = findViewById(R.id.linear_dounet);
-        linearCookies = findViewById(R.id.linear_cookies);
-        linearCandy = findViewById(R.id.linear_candy);
-        linearCapcakewhite = findViewById(R.id.linear_capcake_white);
-        linearDounetwhite = findViewById(R.id.linear_dounet_white);
-        linearCookieswhite = findViewById(R.id.linear_cookies_white);
-        linearCandywhite = findViewById(R.id.linear_candy_white);
-
-        linearCapcake.setBackgroundResource(R.drawable.null_background);
-        linearCookies.setBackgroundResource(R.drawable.null_background);
-        linearDounet.setBackgroundResource(R.drawable.null_background);
-        linearCandy.setBackgroundResource(R.drawable.null_background);
-
-        linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
-        linearCookieswhite.setBackgroundResource(R.drawable.null_background);
-        linearDounetwhite.setBackgroundResource(R.drawable.null_background);
-        linearCandywhite.setBackgroundResource(R.drawable.null_background);
-
-        textCapcake = findViewById(R.id.textView21_capcake);
-        textDounet = findViewById(R.id.textView22_dounet);
-        textCookies = findViewById(R.id.textView31_cookies);
-        textCandy = findViewById(R.id.textView32_candy);
 
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+//        linearCapcake = findViewById(R.id.linear_capcake);
+//        linearDounet = findViewById(R.id.linear_dounet);
+//        linearCookies = findViewById(R.id.linear_cookies);
+//        linearCandy = findViewById(R.id.linear_candy);
+//        linearCapcakewhite = findViewById(R.id.linear_capcake_white);
+//        linearDounetwhite = findViewById(R.id.linear_dounet_white);
+//        linearCookieswhite = findViewById(R.id.linear_cookies_white);
+//        linearCandywhite = findViewById(R.id.linear_candy_white);
 
-        addItems();
+//        linearCapcake.setBackgroundResource(R.drawable.null_background);
+//        linearCookies.setBackgroundResource(R.drawable.null_background);
+//        linearDounet.setBackgroundResource(R.drawable.null_background);
+//        linearCandy.setBackgroundResource(R.drawable.null_background);
+//
+//        linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
+//        linearCookieswhite.setBackgroundResource(R.drawable.null_background);
+//        linearDounetwhite.setBackgroundResource(R.drawable.null_background);
+//        linearCandywhite.setBackgroundResource(R.drawable.null_background);
+
+//        textCapcake = findViewById(R.id.textView21_capcake);
+//        textDounet = findViewById(R.id.textView22_dounet);
+//        textCookies = findViewById(R.id.textView31_cookies);
+//        textCandy = findViewById(R.id.textView32_candy);
+        db = DataBaseAccess.getInstance(this);
+
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        //addItems();
         textNotif();
-
+//
+//
         db.open();
         dessertList=db.getAllDESSERT();
+        CapcakeList=db.getByTypeDESSERT("capcake");
+        Dounetlist=db.getByTypeDESSERT("dounet");
+        CookiesList=db.getByTypeDESSERT("cookies");
+        CandyList=db.getByTypeDESSERT("candy");
         db.close();
 
-        adapter = new Adapter(this, dessertList);
-        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), getLifecycle());
+
+        for (String s : Arrays.asList("All", "Capcake", "Dounet", "Cookies", "Candy")) {
+            adapter.addTab(new ModelPager(s,HomeFragment.newInstance(s,dessertList)));
+        }
+//        adapter.addTab(new ModelPager("All",HomeFragment.newInstance("All",dessertList)));
+//        adapter.addTab(new ModelPager("Capcake",HomeFragment.newInstance("Capcake",CapcakeList)));
+//        adapter.addTab(new ModelPager("Dounet",HomeFragment.newInstance("Dounet",Dounetlist)));
+//        adapter.addTab(new ModelPager("Cookies",HomeFragment.newInstance("Cookies",CookiesList)));
+//        adapter.addTab(new ModelPager("Candy",HomeFragment.newInstance("Candy",CandyList)));
+
+
+        //adapter.addTab(new ModelPager("Dounet",HomeFragment.newInstance("Vegetables")));
+        //adapter.addTab(new ModelPager("Cookies",HomeFragment.newInstance("Protein sources")));
+        //adapter.addTab(new ModelPager("Candy",HomeFragment.newInstance("Grains",4)));
+
+        viewPager.setAdapter(adapter);
+
+        new TabLayoutMediator(tabLayout, viewPager,
+                (tab, position) -> {
+                    // Configure tab titles or custom views here
+                    tab.setText(adapter.getTabName(position));
+                }).attach();
+
+
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onChanged() {
-                super.onChanged();
-                textNotif();
+            public void onTabSelected(TabLayout.Tab tab) {
+//                Toast.makeText(HomeActivity.this, "onTabSelected "+tab.getText()+" "+tab.getPosition()+" "+tab.getId(), Toast.LENGTH_SHORT).show();
+                Log.d("TAG", " "+"onTabSelected "+tab.getText()+" "+tab.getPosition()+" "+tab.getId());
+
+                switch (tab.getPosition()){
+                    case 0:
+                        HomeFragment.newInstance("All",dessertList);
+                        break;
+                    case 1:
+                        HomeFragment.newInstance("Capcake",CapcakeList);
+                        break;
+                    case 2:
+                        HomeFragment.newInstance("Dounet",Dounetlist);
+                        break;
+                    case 3:
+                        HomeFragment.newInstance("Cookies",CookiesList);
+                        break;
+                    case 4:
+                        HomeFragment.newInstance("Candy",CandyList);
+                        break;
+                }
+
             }
+
             @Override
-            public void onItemRangeChanged(int positionStart, int itemCount) {
-                super.onItemRangeChanged(positionStart, itemCount);
-                textNotif();
+            public void onTabUnselected(TabLayout.Tab tab) {
+                //Toast.makeText(HomeActivity.this, "onTabUnselected "+tab.getText(), Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                //Toast.makeText(HomeActivity.this, "onTabReselected "+tab.getPosition(), Toast.LENGTH_SHORT).show();
+
             }
         });
-        recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
 
-        linearCapcake.setOnClickListener(this);
-        linearDounet.setOnClickListener(this);
-        linearCookies.setOnClickListener(this);
-        linearCandy.setOnClickListener(this);
+
+
+
+
+
+
+//
+//        adapter = new Adapter(this, dessertList);
+//        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                textNotif();
+//            }
+//            @Override
+//            public void onItemRangeChanged(int positionStart, int itemCount) {
+//                super.onItemRangeChanged(positionStart, itemCount);
+//                textNotif();
+//            }
+//        });
+//        recyclerView.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
+//
+//        linearCapcake.setOnClickListener(this);
+//        linearDounet.setOnClickListener(this);
+//        linearCookies.setOnClickListener(this);
+//        linearCandy.setOnClickListener(this);
 
         favourite.setOnClickListener(HomeActivity.this);
         cart.setOnClickListener(this);
@@ -145,133 +246,134 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }else if (v.getId() == R.id.imageView_profaile) {
             Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
-        } else if (v.getId() == R.id.linear_capcake) {
-
-                type = "capcake";
-                db.open();
-                dessertList=db.getByTypeDESSERT(type);
-                db.close();
-                adapter = new Adapter(HomeActivity.this, dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                        textNotif();
-                    }
-                });
-                recyclerView.setAdapter(adapter);
-
-                linearCapcake.setBackgroundResource(R.drawable.background_button_checkout);
-                linearCookies.setBackgroundResource(R.drawable.null_background);
-                linearDounet.setBackgroundResource(R.drawable.null_background);
-                linearCandy.setBackgroundResource(R.drawable.null_background);
-
-                linearCapcakewhite.setBackgroundResource(R.color.white);
-                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
-                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
-                linearCandywhite.setBackgroundResource(R.drawable.null_background);
-
-                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.white));
-                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-
-
-        }else if (v.getId() == R.id.linear_dounet) {
-
-                type = "dounet";
-                db.open();
-                dessertList=db.getByTypeDESSERT(type);
-                db.close();
-            adapter = new Adapter(HomeActivity.this, dessertList);
-            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                        textNotif();
-                    }
-                });
-                recyclerView.setAdapter(adapter);
-
-                linearCapcake.setBackgroundResource(R.drawable.null_background);
-                linearCookies.setBackgroundResource(R.drawable.null_background);
-                linearDounet.setBackgroundResource(R.drawable.background_button_checkout);
-                linearCandy.setBackgroundResource(R.drawable.null_background);
-
-                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
-                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
-                linearDounetwhite.setBackgroundResource(R.color.white);
-                linearCandywhite.setBackgroundResource(R.drawable.null_background);
-
-                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textDounet.setTextColor(ContextCompat.getColor(this, R.color.white));
-                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-
-
-        }else if (v.getId() == R.id.linear_cookies) {
-
-                type = "cookies";
-                db.open();
-                dessertList=db.getByTypeDESSERT(type);
-                db.close();
-                adapter = new Adapter(HomeActivity.this, dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                        textNotif();
-                    }
-                });
-                recyclerView.setAdapter(adapter);
-
-                linearCapcake.setBackgroundResource(R.drawable.null_background);
-                linearCookies.setBackgroundResource(R.drawable.background_button_checkout);
-                linearDounet.setBackgroundResource(R.drawable.null_background);
-                linearCandy.setBackgroundResource(R.drawable.null_background);
-
-                linearCookieswhite.setBackgroundResource(R.color.white);
-                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
-                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
-                linearCandywhite.setBackgroundResource(R.drawable.null_background);
-
-                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textCookies.setTextColor(ContextCompat.getColor(this, R.color.white));
-                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-
-        }else if (v.getId() == R.id.linear_candy) {
-
-                type = "candy";
-                db.open();
-                dessertList=db.getByTypeDESSERT(type);
-                db.close();
-                adapter = new Adapter(HomeActivity.this, dessertList);
-                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-                    @Override
-                    public void onChanged() {
-                        super.onChanged();
-                        textNotif();
-                    }
-                });
-                recyclerView.setAdapter(adapter);
-
-                linearCapcake.setBackgroundResource(R.drawable.null_background);
-                linearCookies.setBackgroundResource(R.drawable.null_background);
-                linearDounet.setBackgroundResource(R.drawable.null_background);
-                linearCandy.setBackgroundResource(R.drawable.background_button_checkout);
-
-                linearCandywhite.setBackgroundResource(R.color.white);
-                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
-                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
-                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
-
-            textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-            textCandy.setTextColor(ContextCompat.getColor(this, R.color.white));
-            textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-            textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
-
         }
+//        else if (v.getId() == R.id.linear_capcake) {
+//
+//                type = "capcake";
+//                db.open();
+//                dessertList=db.getByTypeDESSERT(type);
+//                db.close();
+//                adapter = new Adapter(HomeActivity.this, dessertList);
+//                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//                    @Override
+//                    public void onChanged() {
+//                        super.onChanged();
+//                        textNotif();
+//                    }
+//                });
+//                recyclerView.setAdapter(adapter);
+//
+//                linearCapcake.setBackgroundResource(R.drawable.background_button_checkout);
+//                linearCookies.setBackgroundResource(R.drawable.null_background);
+//                linearDounet.setBackgroundResource(R.drawable.null_background);
+//                linearCandy.setBackgroundResource(R.drawable.null_background);
+//
+//                linearCapcakewhite.setBackgroundResource(R.color.white);
+//                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
+//                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
+//                linearCandywhite.setBackgroundResource(R.drawable.null_background);
+//
+//                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.white));
+//                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//
+//
+//        }else if (v.getId() == R.id.linear_dounet) {
+//
+//                type = "dounet";
+//                db.open();
+//                dessertList=db.getByTypeDESSERT(type);
+//                db.close();
+//            adapter = new Adapter(HomeActivity.this, dessertList);
+//            adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//                    @Override
+//                    public void onChanged() {
+//                        super.onChanged();
+//                        textNotif();
+//                    }
+//                });
+//                recyclerView.setAdapter(adapter);
+//
+//                linearCapcake.setBackgroundResource(R.drawable.null_background);
+//                linearCookies.setBackgroundResource(R.drawable.null_background);
+//                linearDounet.setBackgroundResource(R.drawable.background_button_checkout);
+//                linearCandy.setBackgroundResource(R.drawable.null_background);
+//
+//                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
+//                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
+//                linearDounetwhite.setBackgroundResource(R.color.white);
+//                linearCandywhite.setBackgroundResource(R.drawable.null_background);
+//
+//                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textDounet.setTextColor(ContextCompat.getColor(this, R.color.white));
+//                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//
+//
+//        }else if (v.getId() == R.id.linear_cookies) {
+//
+//                type = "cookies";
+//                db.open();
+//                dessertList=db.getByTypeDESSERT(type);
+//                db.close();
+//                adapter = new Adapter(HomeActivity.this, dessertList);
+//                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//                    @Override
+//                    public void onChanged() {
+//                        super.onChanged();
+//                        textNotif();
+//                    }
+//                });
+//                recyclerView.setAdapter(adapter);
+//
+//                linearCapcake.setBackgroundResource(R.drawable.null_background);
+//                linearCookies.setBackgroundResource(R.drawable.background_button_checkout);
+//                linearDounet.setBackgroundResource(R.drawable.null_background);
+//                linearCandy.setBackgroundResource(R.drawable.null_background);
+//
+//                linearCookieswhite.setBackgroundResource(R.color.white);
+//                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
+//                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
+//                linearCandywhite.setBackgroundResource(R.drawable.null_background);
+//
+//                textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textCookies.setTextColor(ContextCompat.getColor(this, R.color.white));
+//                textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//                textCandy.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//
+//        }else if (v.getId() == R.id.linear_candy) {
+//
+//                type = "candy";
+//                db.open();
+//                dessertList=db.getByTypeDESSERT(type);
+//                db.close();
+//                adapter = new Adapter(HomeActivity.this, dessertList);
+//                adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//                    @Override
+//                    public void onChanged() {
+//                        super.onChanged();
+//                        textNotif();
+//                    }
+//                });
+//                recyclerView.setAdapter(adapter);
+//
+//                linearCapcake.setBackgroundResource(R.drawable.null_background);
+//                linearCookies.setBackgroundResource(R.drawable.null_background);
+//                linearDounet.setBackgroundResource(R.drawable.null_background);
+//                linearCandy.setBackgroundResource(R.drawable.background_button_checkout);
+//
+//                linearCandywhite.setBackgroundResource(R.color.white);
+//                linearCookieswhite.setBackgroundResource(R.drawable.null_background);
+//                linearDounetwhite.setBackgroundResource(R.drawable.null_background);
+//                linearCapcakewhite.setBackgroundResource(R.drawable.null_background);
+//
+//            textCapcake.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//            textCandy.setTextColor(ContextCompat.getColor(this, R.color.white));
+//            textDounet.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//            textCookies.setTextColor(ContextCompat.getColor(this, R.color.DarkPurpol));
+//
+//        }
 
     }
 
@@ -356,16 +458,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-public void textNotif(){
+public static void textNotif(){
 
         db.open();
         dessertListFavorate=db.getFavorateDESSERT();
         dessertListCart=db.getCartDESSERT();
         db.close();
 
-    for (Model m:dessertListCart){
-        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
-    }
+//    for (Model m:dessertListCart){
+//        Log.d("TAG", "textNotif: "+m.getName()+" "+m.getPrice()+" "+m.getCart());
+//    }
 
     if (dessertListFavorate.size()>0){
         textViewNotifFaverate.setVisibility(View.VISIBLE);

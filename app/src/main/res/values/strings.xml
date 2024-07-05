@@ -2,4 +2,6 @@
     <string name="app_name">Sweets Store</string>
     <string name="Description_Splash_Screen">Get Boxes Of Delicos Awesomness Delivered To Your Doorstep 24/7.</string>
     <string name="Skip_button">Skip And Go Shopping</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

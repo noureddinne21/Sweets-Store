@@ -95,7 +95,7 @@ public class DataBaseAccess {
                 model.setId(Integer.parseInt(cursor.getString(0)));
                 model.setName(cursor.getString(1));
                 model.setPrice(cursor.getString(2));
-                model.setImg(cursor.getString(3));
+                model.setType(cursor.getString(3));
                 model.setImg(cursor.getString(4));
                 model.setFavorite(Boolean.parseBoolean(cursor.getString(5)));
                 model.setCart(Boolean.parseBoolean(cursor.getString(6)));

@@ -1,5 +1,13 @@
 package Model;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+@SuppressLint("ParcelCreator")
 public class Model {
 
     private int id;
@@ -9,6 +17,8 @@ public class Model {
     private String type;
     private boolean favorite;
     private boolean cart;
+
+
 
     public Model(int id, String name, String price, String type, String img,boolean favorite,boolean cart) {
         this.id = id;
@@ -27,6 +37,7 @@ public class Model {
         this.img = img;
         this.favorite = favorite;
         this.cart = cart;
+
     }
 
     public Model(String name, String price) {
@@ -93,4 +104,5 @@ public class Model {
     public void setCart(boolean cart) {
         this.cart = cart;
     }
+
 }
