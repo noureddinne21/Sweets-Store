@@ -41,12 +41,22 @@ public class Database extends SQLiteOpenHelper {
                 UtelsDB.KEY_TOTAL_PRICE_ITEM_CART+"  TEXT)";
         db.execSQL(CREAT_TABLE);
 
+        CREAT_TABLE="CREATE TABLE "+ UtelsDB.TABLE_PROFILE+" ("+
+                UtelsDB.KEY_ID_PROFILE+" INTEGER PRIMARY KEY,"+
+                UtelsDB.KEY_NAME_PROFILE+" TEXT,"+
+                UtelsDB.KEY_EMAIL_PROFILE+" TEXT,"+
+                UtelsDB.KEY_PASSWORD_PROFILE+" TEXT,"+
+                UtelsDB.KEY_NUMBERPURCHASES_PROFILE+" INTEGER,"+
+                UtelsDB.KEY_TOTALSPEND_PROFILE+" DOUBLE)";
+        db.execSQL(CREAT_TABLE);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+UtelsDB.DESSERT_TABLE);
         db.execSQL("DROP TABLE IF EXISTS "+UtelsDB.DESSERT_TABLE_CART);
+        db.execSQL("DROP TABLE IF EXISTS "+UtelsDB.TABLE_PROFILE);
         onCreate(db);
     }
 

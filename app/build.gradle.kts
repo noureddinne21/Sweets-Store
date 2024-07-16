@@ -31,7 +31,8 @@ android {
 dependencies {
 
     implementation("com.github.bumptech.glide:glide:5.0.0-rc01")
-
+    implementation("com.google.android.material:material:1.3.0-alpha03")
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
 
     implementation(libs.appcompat)
     implementation(libs.material)

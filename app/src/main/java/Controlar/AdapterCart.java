@@ -3,6 +3,7 @@ package Controlar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,10 +48,15 @@ public class AdapterCart extends RecyclerView.Adapter<AdapterCart.ViweHolder>{
 
         ModelCart modelCart = dessertListCart.get(currentPosition);
         db.open();
-        Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));;
+        Model model = db.getDessertCartById(Integer.parseInt(modelCart.getIdd()));
         db.close();
-        holder.textName.setText(shorterWord(model.getName(),25));
-        Glide.with(context).load(model.getImg()).into(holder.imgDessert);
+
+        if (model != null){
+            holder.textName.setText(shorterWord(model.getName(),25));
+            Glide.with(context).load(model.getImg()).into(holder.imgDessert);
+
+            Log.d("TAG", "onBindViewHolder: "+model.getImg());
+        }
 
         holder.textPrice.setText(modelCart.getPrice());
         holder.textCount.setText(modelCart.getCount());

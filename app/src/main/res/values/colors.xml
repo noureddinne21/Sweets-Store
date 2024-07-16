@@ -7,5 +7,12 @@
     <color name="lithPink">#fd76b9</color>
     <color name="lithPink2">#f7aab9</color>
     <color name="DarkPurpol">#4b3754</color>
+    <color name="gray">#E0E0E0</color>
     <color name="lightgray">#4e4945</color>
+
+    <color name="green">#10C06A</color>
+    <color name="red">#DE0338</color>
+    <color name="yalow">#FFC847</color>
+    <color name="blue">#33CDBA</color>
+
 </resources>

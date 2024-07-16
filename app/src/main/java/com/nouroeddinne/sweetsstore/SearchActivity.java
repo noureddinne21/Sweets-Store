@@ -20,7 +20,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexWrap;
+import com.google.android.flexbox.FlexboxLayoutManager;
+
 import java.util.ArrayList;
+import java.util.List;
+
 import Controlar.Adapter;
 import Database.Database;
 import Model.Model;
@@ -28,7 +35,9 @@ import Database.DataBaseAccess;
 
 public class SearchActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
-    RecyclerView recyclerView;
+    RecyclerView recyclerView,recyclerViewHistory,recyclerViewTrand;
+    private AdapterTrand adapterTrand;
+    private AdapterHistory adapterHistory;
     EditText editText;
     ImageView back;
     LinearLayout linear_results,linear_no_results;
@@ -51,14 +60,13 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
         editText = findViewById(R.id.editTextText);
         linear_results = findViewById(R.id.linear_results);
         linear_no_results = findViewById(R.id.linear_no_results);
-
-
         back = findViewById(R.id.imageView17);
-
-
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        loadHistory();
+        loadTrand();
 
         callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -83,6 +91,9 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length()<1){
+                    linear_no_results.setVisibility(View.VISIBLE);
+                }
 
                 db.open();
                 dessertList=db.searchDESSERT(String.valueOf(s));
@@ -109,6 +120,47 @@ public class SearchActivity extends AppCompatActivity implements OnBackPressedDi
     }
 
 
+    public void loadTrand() {
+
+        recyclerViewTrand = findViewById(R.id.recyclerViewTrand);
+        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(this);
+        flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        flexboxLayoutManager.setFlexWrap(FlexWrap.WRAP);
+
+        List<String> items = new ArrayList<>();
+        items.add("Cupcakes with Creamy");
+        items.add("Baked Funfetti");
+        items.add("lemon cupcakes");
+        items.add("chocolate cookies");
+        items.add("cookie bars");
+        items.add("cider doughnuts");
+
+        adapterTrand = new AdapterTrand(items);
+
+        recyclerViewTrand.setLayoutManager(flexboxLayoutManager);
+        recyclerViewTrand.setAdapter(adapterTrand);
+
+    }
+
+
+    public void loadHistory(){
+
+        recyclerViewHistory = findViewById(R.id.recyclerViewHistory);
+        FlexboxLayoutManager flexboxLayoutManager = new FlexboxLayoutManager(this);
+        flexboxLayoutManager.setFlexDirection(FlexDirection.ROW);
+        flexboxLayoutManager.setFlexWrap(FlexWrap.WRAP);
+
+        List<String> items = new ArrayList<>();
+        items.add("Cupcakes");
+        items.add("chocolate");
+        items.add("doughnuts");
+
+        adapterHistory = new AdapterHistory(items);
+
+        recyclerViewHistory.setLayoutManager(flexboxLayoutManager);
+        recyclerViewHistory.setAdapter(adapterHistory);
+
+    }
 
 
 }

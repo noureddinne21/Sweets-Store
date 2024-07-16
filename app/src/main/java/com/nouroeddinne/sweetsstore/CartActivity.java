@@ -2,13 +2,11 @@ package com.nouroeddinne.sweetsstore;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
@@ -18,25 +16,27 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import Controlar.AdapterCart;
-import Database.Database;
+import Model.Model;
 import Model.ModelCart;
 import Database.DataBaseAccess;
+import Model.ModelProfile;
 
-public class CartActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
+public class CartActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner , FragmentQuickAlert.OnButtonLisner {
     private OnBackPressedCallback callback;
     RecyclerView recyclerView;
     Button button;
     ImageView back;
     private TextView totalPrice;
     static RecyclerView.Adapter adapter;
-    static ArrayList<ModelCart> dessertListCart;
+    ArrayList<ModelCart> dessertListCart;
     DataBaseAccess db = DataBaseAccess.getInstance(this);
+    private Double total;
+    private int numberOfItems;
 
-    private static Double total=0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +73,8 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
             public void onClick(View v) {
                 Intent intent = new Intent(CartActivity.this, HomeActivity.class);
                 startActivity(intent);
-                finish();            }
+                finish();
+            }
         });
 
         db.open();
@@ -99,16 +100,29 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
 
         getTotal();
 
+        numberOfItems=0;
+        total=0.0;
         for (ModelCart model : dessertListCart){
             total+=Double.valueOf(model.getPrice());
-            Log.d("TAG", "Cart Activty: id "+model.getId()+" idd "+model.getIdd()+" price "+model.getPrice()+" count "+model.getCount()+" index "+String.valueOf(dessertListCart.indexOf(model)));
+            numberOfItems++;
         }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(CartActivity.this, String.valueOf(total), Toast.LENGTH_SHORT).show();
+                if (HomeActivity.EMAIL!=null){
+                    if (total>0){
+                        FragmentQuickAlert fragment2 = FragmentQuickAlert.newInstance("Success","Payment complited successfully!",String.valueOf(R.color.green),String.valueOf(R.drawable.baseline_done_all_24));
+                        fragment2.show(getSupportFragmentManager(),null);
+                        fragment2.setCancelable(false);
+                    }else {
+                        Toast.makeText(CartActivity.this, "Sorry the cart is empty!", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(CartActivity.this, "login or creat acount!", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -116,6 +130,40 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
 
 
     }
+
+
+    @Override
+    public void onCklick() {
+
+        boolean newCartStatus = false;
+        db.open();
+        Iterator<ModelCart> iterator = dessertListCart.iterator();
+
+        while (iterator.hasNext()) {
+            ModelCart mc = iterator.next();
+            Model model = db.getDessertCartById(Integer.parseInt(mc.getIdd()));
+            model.setCart(newCartStatus);
+            db.updateDessert(model);
+            db.deleteDessertCart(mc);
+            iterator.remove();
+        }
+
+        ModelProfile profile = db.getPersonByEmail(HomeActivity.EMAIL);
+        int nof = profile.getNumberPurchases()+numberOfItems;
+        profile.setNumberPurchases(nof);
+        double ts = profile.getTotalSpend()+total;
+        profile.setTotalSpend(ts);
+        db.updatePerson(profile);
+        db.close();
+        adapter.notifyDataSetChanged();
+
+        Intent intent = new Intent(CartActivity.this,HomeActivity.class);
+        startActivity(intent);
+        finish();
+
+    }
+
+
 
 
     public void getTotal(){
@@ -127,6 +175,12 @@ public class CartActivity extends AppCompatActivity implements OnBackPressedDisp
         totalPrice.setText(String.valueOf(df.format(total)));
 
     }
+
+
+
+
+
+
 
 
 

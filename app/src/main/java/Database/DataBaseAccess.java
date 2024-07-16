@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import Model.Model;
 import Utel.UtelsDB;
 import Model.ModelCart;
+import Model.ModelProfile;
 public class DataBaseAccess {
 
     private SQLiteDatabase sqLiteDatabase;
@@ -315,12 +316,102 @@ public class DataBaseAccess {
     }
 
 
+    public String addProfile(ModelProfile model){
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(UtelsDB.KEY_NAME_PROFILE, model.getName());
+        contentValues.put(UtelsDB.KEY_EMAIL_PROFILE, model.getEmail());
+        contentValues.put(UtelsDB.KEY_PASSWORD_PROFILE, model.getPassword());
+        contentValues.put(UtelsDB.KEY_NUMBERPURCHASES_PROFILE, model.getNumberPurchases());
+        contentValues.put(UtelsDB.KEY_TOTALSPEND_PROFILE, model.getTotalSpend());
+        String n = String.valueOf(sqLiteDatabase.insert(UtelsDB.TABLE_PROFILE,null,contentValues));
+
+        return n;
+    }
 
 
+    public ModelProfile getPerson(ModelProfile profile){
+
+        Cursor cursor = sqLiteDatabase.query(UtelsDB.TABLE_PROFILE,
+                new String[]{UtelsDB.KEY_ID_PROFILE, UtelsDB.KEY_NAME_PROFILE,UtelsDB.KEY_EMAIL_PROFILE,UtelsDB.KEY_PASSWORD_PROFILE,UtelsDB.KEY_NUMBERPURCHASES_PROFILE,UtelsDB.KEY_TOTALSPEND_PROFILE}, UtelsDB.KEY_ID_PROFILE+"=?",
+                new String[]{String.valueOf(profile.getId())},
+                null,null,null,null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            ModelProfile p = new ModelProfile(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    Integer.parseInt(cursor.getString(4)),
+                    Double.parseDouble(cursor.getString(5)));
+            cursor.close();
+            return p;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+
+    public ModelProfile getPersonByEmail(String email){
+
+        Cursor cursor = sqLiteDatabase.query(UtelsDB.TABLE_PROFILE,
+                new String[]{UtelsDB.KEY_ID_PROFILE, UtelsDB.KEY_NAME_PROFILE, UtelsDB.KEY_EMAIL_PROFILE, UtelsDB.KEY_PASSWORD_PROFILE, UtelsDB.KEY_NUMBERPURCHASES_PROFILE,UtelsDB.KEY_TOTALSPEND_PROFILE}, UtelsDB.KEY_EMAIL_PROFILE+"=?",
+                new String[]{email},
+                null,null,null,null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            ModelProfile p = new ModelProfile(
+                    Integer.parseInt(cursor.getString(0)),
+                    cursor.getString(1),
+                    cursor.getString(2),
+                    cursor.getString(3),
+                    cursor.getInt(4),
+                    cursor.getDouble(5));
+            cursor.close();
+            return p;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+
+    public int updatePerson(ModelProfile model){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(UtelsDB.KEY_NAME_PROFILE, model.getName());
+        contentValues.put(UtelsDB.KEY_EMAIL_PROFILE, model.getEmail());
+        contentValues.put(UtelsDB.KEY_PASSWORD_PROFILE, model.getPassword());
+        contentValues.put(UtelsDB.KEY_NUMBERPURCHASES_PROFILE, model.getNumberPurchases());
+        contentValues.put(UtelsDB.KEY_TOTALSPEND_PROFILE,model.getTotalSpend());
+
+        int result = sqLiteDatabase.update(UtelsDB.TABLE_PROFILE,contentValues,UtelsDB.KEY_ID_PROFILE+"=?",new String[]{String.valueOf(model.getId())});
+        return result;
+    }
 
 
+    public boolean isEmailExist(String email) {
+//        if (sqLiteDatabase == null) {
+//            throw new IllegalStateException("Database not initialized");
+//        }
 
+        if (sqLiteDatabase != null){
+            Cursor cursor = sqLiteDatabase.query(UtelsDB.TABLE_PROFILE,
+                    new String[]{UtelsDB.KEY_ID_PROFILE, UtelsDB.KEY_NAME_PROFILE, UtelsDB.KEY_EMAIL_PROFILE, UtelsDB.KEY_PASSWORD_PROFILE, UtelsDB.KEY_NUMBERPURCHASES_PROFILE, UtelsDB.KEY_TOTALSPEND_PROFILE},
+                    UtelsDB.KEY_EMAIL_PROFILE + "=?", new String[]{email}, null, null, null, null);
 
+            if (cursor != null && cursor.moveToFirst()) {
+                cursor.close();
+                return true;
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+            return false;
+        }
+        return false;
+    }
 
 
 

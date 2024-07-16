@@ -57,19 +57,39 @@
 
                 </LinearLayout>
 
-                <EditText
-                    android:id="@+id/editTextText"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
                     android:background="@color/white"
-                    android:drawableRight="@drawable/baseline_search_24"
-                    android:ems="10"
-                    android:hint="Name Dessert"
-                    android:inputType="text"
-                    android:padding="10dp" />
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/editTextText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:background="@color/white"
+                        android:drawableLeft="@drawable/baseline_search_24"
+                        android:drawablePadding="5dp"
+                        android:ems="10"
+                        android:hint="Name Dessert"
+                        android:inputType="text"
+                        android:padding="10dp" />
+
+                    <TextView
+                        android:id="@+id/textView28"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.5"
+                        android:gravity="center"
+                        android:text="Search"
+                        android:textColor="@color/Pink"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -83,9 +103,43 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:itemCount="1"
+                    tools:listitem="@layout/item_list_dessert">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_list_dessert" />
+                    android:orientation="vertical">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewHistory"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:itemCount="4"
+                        tools:listitem="@layout/item_history_search" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Trand"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewTrand"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="8dp"
+                        app:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+                        tools:itemCount="5"
+                        tools:listitem="@layout/item_trend" />
+
+
+                </LinearLayout>
 
             </LinearLayout>
 

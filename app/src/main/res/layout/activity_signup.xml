@@ -101,7 +101,7 @@
                 android:padding="10dp">
 
                 <EditText
-                    android:id="@+id/editTextText_singup_email"
+                    android:id="@+id/editTextText_singup_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -144,7 +144,7 @@
                 android:padding="10dp">
 
                 <EditText
-                    android:id="@+id/editTextText_singup_Email"
+                    android:id="@+id/editTextText_singup_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -188,6 +188,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:background="@drawable/backgroun_item_cart"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -206,6 +207,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="5"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -227,7 +229,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            µ<Button
+            <Button
                 android:id="@+id/button_signup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

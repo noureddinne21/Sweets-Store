@@ -1,14 +1,10 @@
 package Model;
 
-import android.annotation.SuppressLint;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-@SuppressLint("ParcelCreator")
-public class Model {
+public class Model implements Parcelable {
 
     private int id;
     private String name;
@@ -18,9 +14,7 @@ public class Model {
     private boolean favorite;
     private boolean cart;
 
-
-
-    public Model(int id, String name, String price, String type, String img,boolean favorite,boolean cart) {
+    public Model(int id, String name, String price, String type, String img, boolean favorite, boolean cart) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,14 +24,13 @@ public class Model {
         this.cart = cart;
     }
 
-    public Model(String name, String price, String type,String img,boolean favorite,boolean cart) {
+    public Model(String name, String price, String type, String img, boolean favorite, boolean cart) {
         this.name = name;
         this.price = price;
         this.type = type;
         this.img = img;
         this.favorite = favorite;
         this.cart = cart;
-
     }
 
     public Model(String name, String price) {
@@ -45,21 +38,51 @@ public class Model {
         this.price = price;
     }
 
-    public Model() {
+    public Model() {}
+
+    protected Model(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        price = in.readString();
+        img = in.readString();
+        type = in.readString();
+        favorite = in.readByte() != 0;
+        cart = in.readByte() != 0;
     }
 
-    public String getType() {
-        return type;
+    public static final Creator<Model> CREATOR = new Creator<Model>() {
+        @Override
+        public Model createFromParcel(Parcel in) {
+            return new Model(in);
+        }
+
+        @Override
+        public Model[] newArray(int size) {
+            return new Model[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(price);
+        dest.writeString(img);
+        dest.writeString(type);
+        dest.writeByte((byte) (favorite ? 1 : 0));
+        dest.writeByte((byte) (cart ? 1 : 0));
     }
+
+    // Getters and setters for the fields
 
     public int getId() {
         return id;
     }
-
 
     public void setId(int id) {
         this.id = id;
@@ -89,6 +112,14 @@ public class Model {
         this.img = img;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public boolean getFavorite() {
         return favorite;
     }
@@ -104,5 +135,4 @@ public class Model {
     public void setCart(boolean cart) {
         this.cart = cart;
     }
-
 }
