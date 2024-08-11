@@ -2,25 +2,27 @@ package Model;
 
 public class ModelCart {
 
-    private int id;
-    private String idd;
-    private String count;
+    private String uid;
+    private int count;
     private String price;
     private String totalPrice;
 
-    public ModelCart(int id, String idd, String count,String price,String totalPrice) {
-        this.id = id;
-        this.idd = idd;
+    public ModelCart(String uid, int count,String price,String totalPrice) {
+        this.uid = uid;
         this.count = count;
         this.price = price;
         this.totalPrice = totalPrice;
     }
 
-    public ModelCart(String idd, String count,String price,String totalPrice) {
-        this.idd = idd;
-        this.count = count;
+    public ModelCart(String price, int count, String uid) {
         this.price = price;
-        this.totalPrice = totalPrice;
+        this.count = count;
+        this.uid = uid;
+    }
+
+    public ModelCart(String uid, int count) {
+        this.uid = uid;
+        this.count = count;
     }
 
     public ModelCart() {
@@ -34,28 +36,20 @@ public class ModelCart {
         this.totalPrice = totalPrice;
     }
 
-    public String getCount() {
+    public int getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return uid;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getIdd() {
-        return idd;
-    }
-
-    public void setIdd(String idd) {
-        this.idd = idd;
+    public void setId(String id) {
+        this.uid = id;
     }
 
     public String getPrice() {

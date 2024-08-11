@@ -1,4 +1,4 @@
-package com.nouroeddinne.sweetsstore;
+package Controlar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;

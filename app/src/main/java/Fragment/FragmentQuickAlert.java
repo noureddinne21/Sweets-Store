@@ -1,4 +1,4 @@
-package com.nouroeddinne.sweetsstore;
+package Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.nouroeddinne.sweetsstore.R;
 
 public class FragmentQuickAlert extends DialogFragment {
 

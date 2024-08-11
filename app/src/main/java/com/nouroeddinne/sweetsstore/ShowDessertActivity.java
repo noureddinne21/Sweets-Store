@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,12 +23,23 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import Database.Database;
 import Model.Model;
 import Model.ModelCart;
-import Database.DataBaseAccess;
+import Utel.UtelsDB;
 
 public class ShowDessertActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
@@ -37,7 +50,15 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
     private int itemCount = 0 ;
     Double total = 0.0;
     Model model;
-    DataBaseAccess db = DataBaseAccess.getInstance(this);
+    boolean newStatus = false;
+
+    //DataBaseAccess db = DataBaseAccess.getInstance(this);
+    //Model model;
+
+    FirebaseAuth auth;
+    DatabaseReference databaseReferencere;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -73,6 +94,11 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
 
         DecimalFormat df = new DecimalFormat("#.##");
 
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferencere = firebaseDatabase.getReference();
+
         callback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
@@ -92,45 +118,101 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
+            model = extras.getParcelable("model");
 
-            db.open();
+//            db.open();
+//
+            Glide.with(this).load(model.getImg()).into(imgDessert);
+            textName.setText(model.getName());
+            textPrice.setText(model.getPrice());
 
-            int p = extras.getInt("position");
-            Glide.with(this).load(db.getDessertById(p).getImg()).into(imgDessert);
-            if (db.getDessertById(p).getFavorite()){
-                imgFavorate.setImageResource(R.drawable.favorite_full);
-            }else {
-                imgFavorate.setImageResource(R.drawable.favorite_empty);
-            }
-            textName.setText(db.getDessertById(p).getName());
-            textPrice.setText(db.getDessertById(p).getPrice());
+            databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_FAVORATE).child(auth.getUid()).child(model.getId()).child("id").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-            model = new Model(
-                    db.getDessertById(p).getId(),
-                    db.getDessertById(p).getName(),
-                    db.getDessertById(p).getPrice(),
-                    db.getDessertById(p).getType(),
-                    db.getDessertById(p).getImg(),
-                    db.getDessertById(p).getFavorite(),
-                    db.getDessertById(p).getCart());
+                    if (snapshot.getValue()!=null && snapshot.getValue().toString().equals(model.getId())){
+                        imgFavorate.setImageResource(R.drawable.favorite_full);
+                        newStatus = true;
+                    }else{
+                        imgFavorate.setImageResource(R.drawable.favorite_empty);
+                        newStatus = false;
+                    }
 
-            db.close();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+
+
+
+
+//            if (db.getDessertById(p).getFavorite()){
+//                imgFavorate.setImageResource(R.drawable.favorite_full);
+//            }else {
+//                imgFavorate.setImageResource(R.drawable.favorite_empty);
+//            }
+
+//
+//            model = new Model(
+//                    db.getDessertById(p).getId(),
+//                    db.getDessertById(p).getName(),
+//                    db.getDessertById(p).getPrice(),
+//                    db.getDessertById(p).getType(),
+//                    db.getDessertById(p).getImg(),
+//                    db.getDessertById(p).getFavorite(),
+//                    db.getDessertById(p).getCart());
+//
+//            db.close();
 
             imgFavorate.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    db.open();
+                    newStatus =! newStatus;
 
-                    boolean newFavoriteStatus = !db.getDessertById(p).getFavorite();
-                    model.setFavorite(newFavoriteStatus);
-                    db.updateDessert(model);
-                    db.close();
-                    if (newFavoriteStatus) {
-                        imgFavorate.setImageResource(R.drawable.favorite_full);
-                    } else {
+                    if (newStatus){
+
+                        databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_FAVORATE).child(auth.getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    imgFavorate.setImageResource(R.drawable.favorite_full);
+                                }else{
+                                    imgFavorate.setImageResource(R.drawable.favorite_empty);
+                                }
+                            }
+                        });
+
+                    }else {
+
                         imgFavorate.setImageResource(R.drawable.favorite_empty);
+
+                        DatabaseReference ref = databaseReferencere
+                                .child(UtelsDB.FIREBASE_TABLE_DESSERT_FAVORATE)
+                                .child(auth.getUid())
+                                .child(model.getId());
+
+                        ref.removeValue();
+
                     }
+
+
+//                    db.open();
+//
+//                    boolean newFavoriteStatus = !db.getDessertById(p).getFavorite();
+//                    model.setFavorite(newFavoriteStatus);
+//                    db.updateDessert(model);
+//                    db.close();
+
+//                    if (newFavoriteStatus) {
+//                        imgFavorate.setImageResource(R.drawable.favorite_full);
+//                    } else {
+//                        imgFavorate.setImageResource(R.drawable.favorite_empty);
+//                    }
                 }
             });
 
@@ -138,21 +220,37 @@ public class ShowDessertActivity extends AppCompatActivity implements OnBackPres
                 @Override
                 public void onClick(View v) {
 
-                    db.open();
-                    boolean newCartStatus = !db.getDessertById(p).getCart();
+                    ModelCart mc = new ModelCart(model.getPrice(),itemCount,model.getId());
 
-                    if (newCartStatus) {
-                        model.setCart(newCartStatus);
-                        db.updateDessert(model);
-                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(model.getPrice()),String.valueOf(total)));
-                        db.close();
-                        Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        Toast.makeText(ShowDessertActivity.this, "This Dessert Is Already In Cart", Toast.LENGTH_SHORT).show();
+                    databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_CART).child(auth.getUid()).child(model.getId()).setValue(mc).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                 Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
+                                 startActivity(intent);
+                                 finish();
+                            }else{
+                                Toast.makeText(ShowDessertActivity.this, "This Dessert Is Already In Cart", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
 
-                    }
+
+//                    db.open();
+//                    boolean newCartStatus = !db.getDessertById(p).getCart();
+//
+//                    if (newCartStatus) {
+//                        model.setCart(newCartStatus);
+//                        db.updateDessert(model);
+//                        db.addDessertCart(new ModelCart(String.valueOf(model.getId()),String.valueOf(itemCount),String.valueOf(model.getPrice()),String.valueOf(total)));
+//                        db.close();
+//                        Intent intent = new Intent(ShowDessertActivity.this,CartActivity.class);
+//                        startActivity(intent);
+//                        finish();
+//                    } else {
+//                        Toast.makeText(ShowDessertActivity.this, "This Dessert Is Already In Cart", Toast.LENGTH_SHORT).show();
+//
+//                    }
 
 
                 }

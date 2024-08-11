@@ -1,4 +1,4 @@
-package com.nouroeddinne.sweetsstore;
+package Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.nouroeddinne.sweetsstore.R;
 
 public class FragmentQuickAlertExit extends DialogFragment {
 

@@ -1,18 +1,37 @@
 package Model;
 
 public class ModelProfile {
-    String name,email,password;
-    int id,numberPurchases;
+    String name,email,password,gender,uid;
+    int numberPurchases;
     Double totalSpend;
 
-    public ModelProfile(int id,String name, String email, String password, int numberPurchases, Double totalSpend) {
+    public ModelProfile(String name, String email, String password, String gender,String uid, int numberPurchases, Double totalSpend) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.id = id;
+        this.gender = gender;
+        this.uid = uid;
         this.numberPurchases = numberPurchases;
         this.totalSpend = totalSpend;
     }
+
+    public ModelProfile(String name, String email, String password, String gender, int numberPurchases, Double totalSpend) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.gender = gender;
+        this.numberPurchases = numberPurchases;
+        this.totalSpend = totalSpend;
+    }
+
+//    public ModelProfile(String uid, String name, String email, String password, int numberPurchases, Double totalSpend) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//        this.uid = uid;
+//        this.numberPurchases = numberPurchases;
+//        this.totalSpend = totalSpend;
+//    }
 
     public ModelProfile(String name, String email, String password, int numberPurchases, Double totalSpend) {
         this.name = name;
@@ -23,6 +42,16 @@ public class ModelProfile {
     }
 
     public ModelProfile() {
+    }
+
+
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getName() {
@@ -49,12 +78,12 @@ public class ModelProfile {
         this.password = password;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return uid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(String id) {
+        this.uid = id;
     }
 
     public int getNumberPurchases() {

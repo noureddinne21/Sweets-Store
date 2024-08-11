@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "60493849131",
+    "project_id": "sweets-store",
+    "storage_bucket": "sweets-store.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:60493849131:android:bea8b28a9ff6acb26b406e",
+        "android_client_info": {
+          "package_name": "com.nouroeddinne.sweetsstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxVOdqAA19YH0yfH_UXldtwseOkybsXJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,31 +6,25 @@ import android.os.Parcelable;
 
 public class Model implements Parcelable {
 
-    private int id;
+    private String uid;
     private String name;
     private String price;
     private String img;
     private String type;
-    private boolean favorite;
-    private boolean cart;
 
-    public Model(int id, String name, String price, String type, String img, boolean favorite, boolean cart) {
-        this.id = id;
+    public Model(String uid, String name, String price, String type, String img) {
+        this.uid = uid;
         this.name = name;
         this.price = price;
         this.type = type;
         this.img = img;
-        this.favorite = favorite;
-        this.cart = cart;
     }
 
-    public Model(String name, String price, String type, String img, boolean favorite, boolean cart) {
+    public Model(String name, String price, String type, String img) {
         this.name = name;
         this.price = price;
         this.type = type;
         this.img = img;
-        this.favorite = favorite;
-        this.cart = cart;
     }
 
     public Model(String name, String price) {
@@ -41,13 +35,11 @@ public class Model implements Parcelable {
     public Model() {}
 
     protected Model(Parcel in) {
-        id = in.readInt();
+        uid = in.readString();
         name = in.readString();
         price = in.readString();
         img = in.readString();
         type = in.readString();
-        favorite = in.readByte() != 0;
-        cart = in.readByte() != 0;
     }
 
     public static final Creator<Model> CREATOR = new Creator<Model>() {
@@ -69,23 +61,21 @@ public class Model implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
+        dest.writeString(uid);
         dest.writeString(name);
         dest.writeString(price);
         dest.writeString(img);
         dest.writeString(type);
-        dest.writeByte((byte) (favorite ? 1 : 0));
-        dest.writeByte((byte) (cart ? 1 : 0));
     }
 
     // Getters and setters for the fields
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return uid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(String id) {
+        this.uid = id;
     }
 
     public String getName() {
@@ -120,19 +110,5 @@ public class Model implements Parcelable {
         this.type = type;
     }
 
-    public boolean getFavorite() {
-        return favorite;
-    }
 
-    public void setFavorite(boolean favorite) {
-        this.favorite = favorite;
-    }
-
-    public boolean getCart() {
-        return cart;
-    }
-
-    public void setCart(boolean cart) {
-        this.cart = cart;
-    }
 }

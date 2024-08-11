@@ -1,5 +1,6 @@
 package com.nouroeddinne.sweetsstore;
 
+import static Utel.UtelsDB.FIREBASE_TABLE_USERS;
 import static Utel.UtelsDB.SHAREDPREFERNCES_FILENAME_NAME;
 import static Utel.UtelsDB.SHAREDPREFERNCES_FILENAME_USER;
 
@@ -17,23 +18,39 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcherOwner;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 
-import Database.DataBaseAccess;
 import Model.ModelCart;
 import Model.ModelProfile;
+import Utel.UtelsDB;
 
 public class ProfileActivity extends AppCompatActivity implements OnBackPressedDispatcherOwner {
     private OnBackPressedCallback callback;
     ImageView back;
     TextView name,textView_number_of_purches,textView_total_sepend;
     SharedPreferences sharedPreferences;
-    DataBaseAccess db = DataBaseAccess.getInstance(this);
+//    DataBaseAccess db = DataBaseAccess.getInstance(this);
+
+    FirebaseAuth auth;
+    DatabaseReference databaseReferencere;
+    FirebaseUser firebaseUser;
+    FirebaseDatabase firebaseDatabase;
+
+    ModelProfile profile;
 
 
     @SuppressLint("MissingInflatedId")
@@ -53,21 +70,161 @@ public class ProfileActivity extends AppCompatActivity implements OnBackPressedD
         textView_total_sepend = findViewById(R.id.textView_total_sepend);
         textView_number_of_purches = findViewById(R.id.textView_number_of_purches);
 
-        sharedPreferences = getSharedPreferences(SHAREDPREFERNCES_FILENAME_USER, Context.MODE_PRIVATE);
+        auth = FirebaseAuth.getInstance();
+        firebaseUser = auth.getCurrentUser();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReferencere = firebaseDatabase.getReference();
 
-        if (sharedPreferences.getString(SHAREDPREFERNCES_FILENAME_NAME, null)!=null) {
-            name.setText(sharedPreferences.getString(SHAREDPREFERNCES_FILENAME_NAME, null));
-        }
+        //sharedPrferences = getSharedPreferences(SHAREDPREFERNCES_FILENAME_USER, Context.MODE_PRIVATE);
+//        if (sharedPreferences.getString(SHAREDPREFERNCES_FILENAME_NAME, null)!=null) {
+//            name.setText(sharedPreferences.getString(SHAREDPREFERNCES_FILENAME_NAME, null));
+//        }
 
 
-        db.open();
-        ModelProfile profile =db.getPersonByEmail(HomeActivity.EMAIL);
-        db.close();
 
-        textView_total_sepend.setText(String.valueOf(formatTotal(profile.getTotalSpend())));
-        textView_number_of_purches.setText(String.valueOf(profile.getNumberPurchases()));
-        Log.d("TAG", "onCreate: "+profile.getId()+" "+profile.getName()+" "+profile.getEmail()+" "+profile.getPassword()+" "+profile.getNumberPurchases()+" "+profile.getTotalSpend());
 
+        databaseReferencere.child(FIREBASE_TABLE_USERS).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                ModelProfile profile = snapshot.getValue(ModelProfile.class);
+
+                name.setText(profile.getName());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+//
+//
+//        // update the number of purchess & total spend
+//
+//        databaseReferencere.child(UtelsDB.FIREBASE_TABLE_USERS).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//
+//                databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_CHECKOUT).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        int numberPurchases = (int) snapshot.getChildrenCount();
+//                        databaseReferencere.child(UtelsDB.FIREBASE_TABLE_USERS).child(auth.getUid()).child("numberPurchases").setValue(numberPurchases);
+//
+//
+//                        databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_CHECKOUT).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                double totalSpend = 0.0;
+//                                for (DataSnapshot checkoutSnapshot : snapshot.getChildren()){
+//                                    if (checkoutSnapshot.child("total").getValue() != null){
+//                                        totalSpend += Double.parseDouble(String.valueOf(checkoutSnapshot.child("total").getValue()));
+//                                    }
+//                                }
+//                                Toast.makeText(ProfileActivity.this, "tot is "+totalSpend, Toast.LENGTH_SHORT).show();
+//                                databaseReferencere.child(UtelsDB.FIREBASE_TABLE_USERS).child(auth.getUid()).child("totalSpend").setValue(totalSpend);
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//
+//                            }
+//                        });
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//
+////                                    mp.setTotalSpend(totalSpend);
+////
+////                                    databaseReferencere.child(UtelsDB.FIREBASE_TABLE_USERS).child(auth.getUid()).setValue(mp).addOnCompleteListener(new OnCompleteListener<Void>() {
+////                                        @Override
+////                                        public void onComplete(@NonNull Task<Void> task) {
+////                                            if (task.isSuccessful()) {
+////                                                Toast.makeText(CartActivity.this, "Checkout successful!", Toast.LENGTH_SHORT).show();
+////                                            } else {
+////                                                Toast.makeText(CartActivity.this, "Failed ", Toast.LENGTH_SHORT).show();
+////                                            }
+////                                        }
+////                                    });
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+        databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_CHECKOUT).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int numberPurchases = (int) snapshot.getChildrenCount();
+                textView_number_of_purches.setText(String.valueOf(numberPurchases));
+                databaseReferencere.child(UtelsDB.FIREBASE_TABLE_DESSERT_CHECKOUT).child(auth.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        double totalSpend = 0.0;
+                        for (DataSnapshot checkoutSnapshot : snapshot.getChildren()){
+                            if (checkoutSnapshot.child("totalSpend").getValue() != null){
+                                totalSpend += Double.parseDouble(String.valueOf(checkoutSnapshot.child("totalSpend").getValue()));
+                            }
+                        }
+                        textView_total_sepend.setText(String.valueOf(formatTotal(totalSpend)));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+//        db.open();
+//        ModelProfile profile =db.getPersonByEmail(HomeActivity.EMAIL);
+//        db.close();
+
+
+//        Log.d("TAG", "onCreate: "+profile.getId()+" "+profile.getName()+" "+profile.getEmail()+" "+profile.getPassword()+" "+profile.getNumberPurchases()+" "+profile.getTotalSpend());
+
+//        if (profile == null){
+//            Toast.makeText(this, "null", Toast.LENGTH_SHORT).show();
+//        }
 
 
         callback = new OnBackPressedCallback(true /* enabled by default */) {

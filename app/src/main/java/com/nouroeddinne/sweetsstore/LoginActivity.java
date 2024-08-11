@@ -22,9 +22,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import Database.DataBaseAccess;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,7 +39,10 @@ public class LoginActivity extends AppCompatActivity {
     EditText email,password;
     private boolean PasswordVisible = false;
     SharedPreferences sharedPreferences;
-    DataBaseAccess db = DataBaseAccess.getInstance(this);
+    //DataBaseAccess db = DataBaseAccess.getInstance(this);
+
+    FirebaseAuth auth;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -54,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(SHAREDPREFERNCES_FILENAME_USER, Context.MODE_PRIVATE);
 
+        auth = FirebaseAuth.getInstance();
 
         imgShow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,20 +90,13 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (validate(EMAIL_PATTERN,email.getText().toString())&& !email.getText().toString().isEmpty()){
                     if (validate(PASSWORD_PATTERN,password.getText().toString())&& !password.getText().toString().isEmpty()){
-                        if (db.isEmailExist(email.getText().toString())){
+//                        if (db.isEmailExist(email.getText().toString())){
+//                        }else {
+//                            email.setError("This email is not exist add other email or create a new account.");
+//                        }
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString(SHAREDPREFERNCES_FILENAME_EMAIL, email.getText().toString());
-                            editor.putString(SHAREDPREFERNCES_FILENAME_PASSWORD, password.getText().toString());
-                            editor.apply();
+                        login(email.getText().toString(), password.getText().toString());
 
-                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        }else {
-                            email.setError("This email is not exist add other email or create a new account.");
-                        }
                     }else {
                         password.setError("At least 8 chars\n" +
                                 "\n" +
@@ -171,4 +173,58 @@ public class LoginActivity extends AppCompatActivity {
 
 
     }
+
+
+    public void login(String email,String password){
+
+        auth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }else {
+                            Toast.makeText(LoginActivity.this, "Sign in is not successful", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                });
+
+
+
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.putString(SHAREDPREFERNCES_FILENAME_EMAIL, email.getText().toString());
+//        editor.putString(SHAREDPREFERNCES_FILENAME_PASSWORD, password.getText().toString());
+//        editor.apply();
+//
+//        Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
+//        startActivity(intent);
+//        finish();
+//
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

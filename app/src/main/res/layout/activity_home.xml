@@ -140,7 +140,7 @@
                     android:layout_marginTop="-10dp"
                     android:background="@drawable/custom_notification_masseg"
                     android:gravity="center"
-                    android:text="8"
+                    android:text="00"
                     android:textColor="@color/white"
                     android:textSize="7sp"
                     android:textStyle="bold" />
@@ -182,7 +182,7 @@
                     android:layout_marginTop="-10dp"
                     android:background="@drawable/custom_notification_masseg"
                     android:gravity="center"
-                    android:text="8"
+                    android:text="00"
                     android:textColor="@color/white"
                     android:textSize="7sp"
                     android:textStyle="bold" />

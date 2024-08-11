@@ -1,4 +1,4 @@
-package com.nouroeddinne.sweetsstore;
+package Fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+
+import com.nouroeddinne.sweetsstore.R;
 
 public class FragmentDialogWaiting extends DialogFragment {
 
