@@ -14,8 +14,6 @@ Here are some screenshots of the Sweet Store app:
 |--------------|--------------|--------------|
 | ![Screenshot 7](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-40-28-594_com.nouroeddinne.sweetsstore.jpg) | ![Screenshot 8](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-40-33-500_com.nouroeddinne.sweetsstore.jpg) | ![Screenshot 9](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-40-58-206_com.nouroeddinne.sweetsstore.jpg) |
 
-| Screenshot 10 |
-|---------------|
-| ![Screenshot 10](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-03-387_com.nouroeddinne.sweetsstore.jpg) |
-| ![Screenshot 11](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-07-604_com.nouroeddinne.sweetsstore.jpg) |
-| ![Screenshot 12](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-22-647_com.nouroeddinne.sweetsstore.jpg) |
+| Screenshot 10 | Screenshot 11 | Screenshot 12 |
+|---------------|---------------|---------------|
+| ![Screenshot 10](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-03-387_com.nouroeddinne.sweetsstore.jpg) | ![Screenshot 11](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-07-604_com.nouroeddinne.sweetsstore.jpg) | ![Screenshot 12](https://raw.githubusercontent.com/noureddinne21/Sweets-Store/refs/heads/main/Screenshot_2024-10-30-16-41-22-647_com.nouroeddinne.sweetsstore.jpg) |
