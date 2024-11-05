@@ -52,3 +52,7 @@ The Sweet Store app follows the **MVC** architectural pattern to separate concer
 This architecture enhances maintainability and scalability, making it easier to develop and manage the app as it grows.
 
 Thanks.
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
